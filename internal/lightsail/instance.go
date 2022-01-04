@@ -126,7 +126,6 @@ func ResourceInstance() *schema.Resource {
 func resourceInstanceCreate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*lightsail.Client)
 	iName := d.Get("name").(string)
-	// tags := d.Get("tags")
 	tags := tftags.New(d.Get("tags").(map[string]interface{}))
 
 	req := lightsail.CreateInstancesInput{

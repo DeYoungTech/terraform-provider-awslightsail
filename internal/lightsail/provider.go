@@ -22,6 +22,8 @@ func Provider() *schema.Provider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
+			"awslightsail_key_pair": ResourceKeyPair(),
+			"awslightsail_domain":   ResourceDomain(),
 			"awslightsail_instance": ResourceInstance(),
 		},
 	}

@@ -19,25 +19,25 @@ import (
 )
 
 func TestAccInstance_basic(t *testing.T) {
-	resourceName := "awslightsail_instance.instance"
-	lightsailName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
+	rName := "awslightsail_instance.instance"
+	lName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
 
 	resource.ParallelTest(t, resource.TestCase{
 		Providers:    testhelper.GetProviders(),
 		CheckDestroy: testAccCheckInstanceDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfig_basic(lightsailName),
+				Config: testAccInstanceConfig_basic(lName),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					testAccCheckInstanceExists(resourceName),
-					resource.TestCheckResourceAttrSet(resourceName, "availability_zone"),
-					resource.TestCheckResourceAttrSet(resourceName, "blueprint_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "bundle_id"),
-					resource.TestMatchResourceAttr(resourceName, "ipv6_address", regexp.MustCompile(`([a-f0-9]{1,4}:){7}[a-f0-9]{1,4}`)),
-					resource.TestCheckResourceAttr(resourceName, "ipv6_addresses.#", "1"),
-					resource.TestCheckResourceAttrSet(resourceName, "key_pair_name"),
-					resource.TestCheckResourceAttr(resourceName, "tags.%", "0"),
-					resource.TestMatchResourceAttr(resourceName, "ram_size", regexp.MustCompile(`\d+(.\d+)?`)),
+					testAccCheckInstanceExists(rName),
+					resource.TestCheckResourceAttrSet(rName, "availability_zone"),
+					resource.TestCheckResourceAttrSet(rName, "blueprint_id"),
+					resource.TestCheckResourceAttrSet(rName, "bundle_id"),
+					resource.TestMatchResourceAttr(rName, "ipv6_address", regexp.MustCompile(`([a-f0-9]{1,4}:){7}[a-f0-9]{1,4}`)),
+					resource.TestCheckResourceAttr(rName, "ipv6_addresses.#", "1"),
+					resource.TestCheckResourceAttrSet(rName, "key_pair_name"),
+					resource.TestCheckResourceAttr(rName, "tags.%", "0"),
+					resource.TestMatchResourceAttr(rName, "ram_size", regexp.MustCompile(`\d+(.\d+)?`)),
 				),
 			},
 		},
@@ -46,42 +46,42 @@ func TestAccInstance_basic(t *testing.T) {
 
 func TestAccInstance_name(t *testing.T) {
 
-	resourceName := "awslightsail_instance.instance"
-	lightsailName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
-	lightsailNameWithSpaces := fmt.Sprint(lightsailName, "string with spaces")
-	lightsailNameWithStartingDigit := fmt.Sprintf("01-%s", lightsailName)
-	lightsailNameWithUnderscore := fmt.Sprintf("%s_123456", lightsailName)
+	rName := "awslightsail_instance.instance"
+	lName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
+	lNameWithSpaces := fmt.Sprint(lName, "string with spaces")
+	lNameWithStartingDigit := fmt.Sprintf("01-%s", lName)
+	lNameWithUnderscore := fmt.Sprintf("%s_123456", lName)
 
 	resource.ParallelTest(t, resource.TestCase{
 		Providers:    testhelper.GetProviders(),
 		CheckDestroy: testAccCheckInstanceDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccInstanceConfig_basic(lightsailNameWithSpaces),
+				Config:      testAccInstanceConfig_basic(lNameWithSpaces),
 				ExpectError: regexp.MustCompile(`must contain only alphanumeric characters, underscores, hyphens, and dots`),
 			},
 			{
-				Config:      testAccInstanceConfig_basic(lightsailNameWithStartingDigit),
+				Config:      testAccInstanceConfig_basic(lNameWithStartingDigit),
 				ExpectError: regexp.MustCompile(`must begin with an alphabetic character`),
 			},
 			{
-				Config: testAccInstanceConfig_basic(lightsailName),
+				Config: testAccInstanceConfig_basic(lName),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					testAccCheckInstanceExists(resourceName),
-					resource.TestCheckResourceAttrSet(resourceName, "availability_zone"),
-					resource.TestCheckResourceAttrSet(resourceName, "blueprint_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "bundle_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "key_pair_name"),
+					testAccCheckInstanceExists(rName),
+					resource.TestCheckResourceAttrSet(rName, "availability_zone"),
+					resource.TestCheckResourceAttrSet(rName, "blueprint_id"),
+					resource.TestCheckResourceAttrSet(rName, "bundle_id"),
+					resource.TestCheckResourceAttrSet(rName, "key_pair_name"),
 				),
 			},
 			{
-				Config: testAccInstanceConfig_basic(lightsailNameWithUnderscore),
+				Config: testAccInstanceConfig_basic(lNameWithUnderscore),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					testAccCheckInstanceExists(resourceName),
-					resource.TestCheckResourceAttrSet(resourceName, "availability_zone"),
-					resource.TestCheckResourceAttrSet(resourceName, "blueprint_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "bundle_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "key_pair_name"),
+					testAccCheckInstanceExists(rName),
+					resource.TestCheckResourceAttrSet(rName, "availability_zone"),
+					resource.TestCheckResourceAttrSet(rName, "blueprint_id"),
+					resource.TestCheckResourceAttrSet(rName, "bundle_id"),
+					resource.TestCheckResourceAttrSet(rName, "key_pair_name"),
 				),
 			},
 		},
@@ -89,33 +89,33 @@ func TestAccInstance_name(t *testing.T) {
 }
 
 func TestAccInstance_tags(t *testing.T) {
-	resourceName := "awslightsail_instance.instance"
-	lightsailName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
+	rName := "awslightsail_instance.instance"
+	lName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
 
 	resource.ParallelTest(t, resource.TestCase{
 		Providers:    testhelper.GetProviders(),
 		CheckDestroy: testAccCheckInstanceDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfig_tags1(lightsailName),
+				Config: testAccInstanceConfig_tags1(lName),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					testAccCheckInstanceExists(resourceName),
-					resource.TestCheckResourceAttrSet(resourceName, "availability_zone"),
-					resource.TestCheckResourceAttrSet(resourceName, "blueprint_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "bundle_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "key_pair_name"),
-					resource.TestCheckResourceAttr(resourceName, "tags.%", "2"),
+					testAccCheckInstanceExists(rName),
+					resource.TestCheckResourceAttrSet(rName, "availability_zone"),
+					resource.TestCheckResourceAttrSet(rName, "blueprint_id"),
+					resource.TestCheckResourceAttrSet(rName, "bundle_id"),
+					resource.TestCheckResourceAttrSet(rName, "key_pair_name"),
+					resource.TestCheckResourceAttr(rName, "tags.%", "2"),
 				),
 			},
 			{
-				Config: testAccInstanceConfig_tags2(lightsailName),
+				Config: testAccInstanceConfig_tags2(lName),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					testAccCheckInstanceExists(resourceName),
-					resource.TestCheckResourceAttrSet(resourceName, "availability_zone"),
-					resource.TestCheckResourceAttrSet(resourceName, "blueprint_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "bundle_id"),
-					resource.TestCheckResourceAttrSet(resourceName, "key_pair_name"),
-					resource.TestCheckResourceAttr(resourceName, "tags.%", "3"),
+					testAccCheckInstanceExists(rName),
+					resource.TestCheckResourceAttrSet(rName, "availability_zone"),
+					resource.TestCheckResourceAttrSet(rName, "blueprint_id"),
+					resource.TestCheckResourceAttrSet(rName, "bundle_id"),
+					resource.TestCheckResourceAttrSet(rName, "key_pair_name"),
+					resource.TestCheckResourceAttr(rName, "tags.%", "3"),
 				),
 			},
 		},
@@ -123,14 +123,14 @@ func TestAccInstance_tags(t *testing.T) {
 }
 
 func TestAccInstance_disappears(t *testing.T) {
-	resourceName := "awslightsail_instance.instance"
-	lightsailName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
+	rName := "awslightsail_instance.instance"
+	lName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
 
 	testDestroy := func(*terraform.State) error {
 		// reach out and DELETE the Instance
 		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
 		_, err := conn.DeleteInstance(context.TODO(), &lightsail.DeleteInstanceInput{
-			InstanceName: aws.String(lightsailName),
+			InstanceName: aws.String(lName),
 		})
 
 		if err != nil {
@@ -148,9 +148,9 @@ func TestAccInstance_disappears(t *testing.T) {
 		CheckDestroy: testAccCheckInstanceDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccInstanceConfig_basic(lightsailName),
+				Config: testAccInstanceConfig_basic(lName),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckInstanceExists(resourceName),
+					testAccCheckInstanceExists(rName),
 					testDestroy,
 				),
 				ExpectNonEmptyPlan: true,
@@ -220,7 +220,7 @@ func testAccCheckInstanceDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccInstanceConfig_basic(lightsailName string) string {
+func testAccInstanceConfig_basic(lName string) string {
 	return fmt.Sprintf(`
 data "awslightsail_availability_zones" "all" {}
 
@@ -232,10 +232,10 @@ resource "awslightsail_instance" "instance" {
   tags ={
   }
 }
-`, lightsailName)
+`, lName)
 }
 
-func testAccInstanceConfig_tags1(lightsailName string) string {
+func testAccInstanceConfig_tags1(lName string) string {
 	return fmt.Sprintf(`
 data "awslightsail_availability_zones" "all" {}
 
@@ -250,10 +250,10 @@ resource "awslightsail_instance" "instance" {
     KeyOnlyTag = ""
   }
 }
-`, lightsailName)
+`, lName)
 }
 
-func testAccInstanceConfig_tags2(lightsailName string) string {
+func testAccInstanceConfig_tags2(lName string) string {
 	return fmt.Sprintf(`
 data "awslightsail_availability_zones" "all" {}
 
@@ -269,5 +269,5 @@ resource "awslightsail_instance" "instance" {
     ExtraName  = "tf-test"
   }
 }
-`, lightsailName)
+`, lName)
 }

@@ -19,6 +19,10 @@ func GetProviders() map[string]*schema.Provider {
 	}
 }
 
+// DefaultEmailAddress is the default email address to set as a
+// resource or data source parameter for acceptance tests.
+const DefaultEmailAddress = "no-reply@deyoung.dev"
+
 // func testAccPreCheck(t *testing.T) {
 // 	conn := provider.Meta(*lightsail.Client)
 
