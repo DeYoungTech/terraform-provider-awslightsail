@@ -1,12 +1,11 @@
 ---
-subcategory: "Lightsail"
-layout: "aws"
-page_title: "AWS: awslightsail__key_pair"
+layout: "awslightsail"
+page_title: "AWS Lightsail: awslightsail_key_pair"
 description: |-
   Provides an Lightsail Key Pair
 ---
 
-# Resource: awslightsail__key_pair
+# Resource: awslightsail_key_pair
 
 Provides a Lightsail Key Pair, for use with Lightsail Instances. These key pairs
 are separate from EC2 Key Pairs, and must be created or imported for use with
@@ -20,7 +19,7 @@ Lightsail.
 
 ```terraform
 # Create a new Lightsail Key Pair
-resource "awslightsail__key_pair" "lg_key_pair" {
+resource "awslightsail_key_pair" "lg_key_pair" {
   name = "lg_key_pair"
 }
 ```
@@ -28,7 +27,7 @@ resource "awslightsail__key_pair" "lg_key_pair" {
 ### Create New Key Pair with PGP Encrypted Private Key
 
 ```terraform
-resource "awslightsail__key_pair" "lg_key_pair" {
+resource "awslightsail_key_pair" "lg_key_pair" {
   name    = "lg_key_pair"
   pgp_key = "keybase:keybaseusername"
 }
@@ -37,7 +36,7 @@ resource "awslightsail__key_pair" "lg_key_pair" {
 ### Existing Public Key Import
 
 ```terraform
-resource "awslightsail__key_pair" "lg_key_pair" {
+resource "awslightsail_key_pair" "lg_key_pair" {
   name       = "importing"
   public_key = file("~/.ssh/id_rsa.pub")
 }

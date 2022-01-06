@@ -1,12 +1,11 @@
 ---
-subcategory: "Lightsail"
-layout: "aws"
-page_title: "AWS: awslightsail__domain"
+layout: "awslightsail"
+page_title: "AWS Lightsail: awslightsail_domain"
 description: |-
   Provides an Lightsail Domain
 ---
 
-# Resource: awslightsail__domain
+# Resource: awslightsail_domain
 
 Creates a domain resource for the specified domain (e.g., example.com).
 You cannot register a new domain name using Lightsail. You must register
@@ -19,7 +18,7 @@ this parameter to manage the DNS records for that domain.
 ## Example Usage
 
 ```terraform
-resource "awslightsail__domain" "domain_test" {
+resource "awslightsail_domain" "domain_test" {
   domain_name = "mydomain.com"
 }
 ```

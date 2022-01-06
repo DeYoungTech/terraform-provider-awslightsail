@@ -1,9 +1,11 @@
 package lightsail
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
@@ -59,43 +61,43 @@ func waitLightsailOperation(conn *lightsail.Client, oid *string) error {
 	return err
 }
 
-// // waitDatabaseModified waits for a Modified Database return available
-// func waitDatabaseModified(conn *lightsail.Lightsail, db *string) error {
-// 	stateConf := &resource.StateChangeConf{
-// 		Pending:    []string{DatabaseStateModifying},
-// 		Target:     []string{DatabaseStateAvailable},
-// 		Refresh:    statusLightsailDatabase(conn, db),
-// 		Timeout:    DatabaseTimeout,
-// 		Delay:      DatabaseDelay,
-// 		MinTimeout: DatabaseMinTimeout,
-// 	}
+// waitDatabaseModified waits for a Modified Database return available
+func waitDatabaseModified(conn *lightsail.Client, db *string) error {
+	stateConf := &resource.StateChangeConf{
+		Pending:    []string{DatabaseStateModifying},
+		Target:     []string{DatabaseStateAvailable},
+		Refresh:    statusLightsailDatabase(conn, db),
+		Timeout:    DatabaseTimeout,
+		Delay:      DatabaseDelay,
+		MinTimeout: DatabaseMinTimeout,
+	}
 
-// 	outputRaw, err := stateConf.WaitForState()
+	outputRaw, err := stateConf.WaitForState()
 
-// 	if _, ok := outputRaw.(*lightsail.GetRelationalDatabaseOutput); ok {
-// 		return err
-// 	}
+	if _, ok := outputRaw.(*lightsail.GetRelationalDatabaseOutput); ok {
+		return err
+	}
 
-// 	return err
-// }
+	return err
+}
 
-// // waitDatabaseBackupRetentionModified waits for a Modified  BackupRetention on Database return available
+// waitDatabaseBackupRetentionModified waits for a Modified  BackupRetention on Database return available
 
-// func waitDatabaseBackupRetentionModified(conn *lightsail.Lightsail, db *string, status *bool) error {
-// 	stateConf := &resource.StateChangeConf{
-// 		Pending:    []string{strconv.FormatBool(!aws.BoolValue(status))},
-// 		Target:     []string{strconv.FormatBool(aws.BoolValue(status))},
-// 		Refresh:    statusLightsailDatabaseBackupRetention(conn, db),
-// 		Timeout:    DatabaseTimeout,
-// 		Delay:      DatabaseDelay,
-// 		MinTimeout: DatabaseMinTimeout,
-// 	}
+func waitDatabaseBackupRetentionModified(conn *lightsail.Client, db *string, status *bool) error {
+	stateConf := &resource.StateChangeConf{
+		Pending:    []string{strconv.FormatBool(!aws.BoolValue(status))},
+		Target:     []string{strconv.FormatBool(aws.BoolValue(status))},
+		Refresh:    statusLightsailDatabaseBackupRetention(conn, db),
+		Timeout:    DatabaseTimeout,
+		Delay:      DatabaseDelay,
+		MinTimeout: DatabaseMinTimeout,
+	}
 
-// 	outputRaw, err := stateConf.WaitForState()
+	outputRaw, err := stateConf.WaitForState()
 
-// 	if _, ok := outputRaw.(*lightsail.GetRelationalDatabaseOutput); ok {
-// 		return err
-// 	}
+	if _, ok := outputRaw.(*lightsail.GetRelationalDatabaseOutput); ok {
+		return err
+	}
 
-// 	return err
-// }
+	return err
+}

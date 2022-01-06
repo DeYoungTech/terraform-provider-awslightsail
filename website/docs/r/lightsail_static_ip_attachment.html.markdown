@@ -1,12 +1,11 @@
 ---
-subcategory: "Lightsail"
-layout: "aws"
-page_title: "AWS: awslightsail__static_ip_attachment"
+layout: "awslightsail"
+page_title: "AWS Lightsail: awslightsail_static_ip_attachment"
 description: |-
   Provides an Lightsail Static IP Attachment
 ---
 
-# Resource: awslightsail__static_ip_attachment
+# Resource: awslightsail_static_ip_attachment
 
 Provides a static IP address attachment - relationship between a Lightsail static IP & Lightsail instance.
 
@@ -15,16 +14,16 @@ Provides a static IP address attachment - relationship between a Lightsail stati
 ## Example Usage
 
 ```terraform
-resource "awslightsail__static_ip_attachment" "test" {
-  static_ip_name = awslightsail__static_ip.test.id
-  instance_name  = awslightsail__instance.test.id
+resource "awslightsail_static_ip_attachment" "test" {
+  static_ip_name = awslightsail_static_ip.test.id
+  instance_name  = awslightsail_instance.test.id
 }
 
-resource "awslightsail__static_ip" "test" {
+resource "awslightsail_static_ip" "test" {
   name = "example"
 }
 
-resource "awslightsail__instance" "test" {
+resource "awslightsail_instance" "test" {
   name              = "example"
   availability_zone = "us-east-1b"
   blueprint_id      = "string"

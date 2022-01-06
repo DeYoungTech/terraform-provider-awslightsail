@@ -1,12 +1,11 @@
 ---
-subcategory: "Lightsail"
-layout: "aws"
-page_title: "AWS: awslightsail__instance"
+layout: "awslightsail"
+page_title: "AWS Lightsail: awslightsail__instance"
 description: |-
   Provides an Lightsail Instance
 ---
 
-# Resource: awslightsail__instance
+# Resource: awslightsail_instance
 
 Provides a Lightsail Instance. Amazon Lightsail is a service to provide easy virtual private servers
 with custom software already setup. See [What is Amazon Lightsail?](https://lightsail.aws.amazon.com/ls/docs/getting-started/article/what-is-amazon-lightsail)
@@ -18,7 +17,7 @@ for more information.
 
 ```terraform
 # Create a new GitLab Lightsail Instance
-resource "awslightsail__instance" "gitlab_test" {
+resource "awslightsail_instance" "gitlab_test" {
   name              = "custom_gitlab"
   availability_zone = "us-east-1b"
   blueprint_id      = "string"

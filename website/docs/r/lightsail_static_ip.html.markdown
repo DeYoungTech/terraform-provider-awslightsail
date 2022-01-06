@@ -1,12 +1,11 @@
 ---
-subcategory: "Lightsail"
-layout: "aws"
-page_title: "AWS: awslightsail__static_ip"
+layout: "awslightsail"
+page_title: "AWS: awslightsail_static_ip"
 description: |-
   Provides an Lightsail Static IP
 ---
 
-# Resource: awslightsail__static_ip
+# Resource: awslightsail_static_ip
 
 Allocates a static IP address.
 
@@ -15,7 +14,7 @@ Allocates a static IP address.
 ## Example Usage
 
 ```terraform
-resource "awslightsail__static_ip" "test" {
+resource "awslightsail_static_ip" "test" {
   name = "example"
 }
 ```
