@@ -14,7 +14,7 @@ on:
       - .markdownlinkcheck.json
       - .markdownlint.yml
       - .tflint.hcl
-      - website/docs/**
+      - docs/**
       - tools/go.mod
 
 jobs:
@@ -23,20 +23,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
-        name: markdown-link-check website/docs/**/*.markdown
+        name: markdown-link-check docs/**/*.markdown
         with:
           use-quiet-mode: "yes"
           use-verbose-mode: "yes"
           config-file: ".markdownlinkcheck.json"
-          folder-path: "website/docs"
+          folder-path: "docs"
           file-extension: ".markdown"
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
-        name: markdown-link-check website/docs/**/*.md
+        name: markdown-link-check docs/**/*.md
         with:
           use-quiet-mode: "yes"
           use-verbose-mode: "yes"
           config-file: ".markdownlinkcheck.json"
-          folder-path: "website/docs"
+          folder-path: "docs"
           file-extension: ".md"
   markdown-lint:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
       - uses: avto-dev/markdown-lint@v1
         with:
           config: ".markdownlint.yml"
-          args: "website/docs"
+          args: "docs"
   misspell:
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +62,7 @@ jobs:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-pkg-mod-${{ hashFiles('go.sum') }}
       - run: cd tools && go install github.com/client9/misspell/cmd/misspell
-      - run: misspell -error -source text website/
+      - run: misspell -error -source text 
   terrafmt:
     runs-on: ubuntu-latest
     steps:
@@ -131,15 +131,15 @@ jobs:
           )
           while read -r filename; do
             rules=("${shared_rules[@]}")
-            if [[ "$filename" == "./website/docs/guides/version-2-upgrade.html.md" ]]; then
-                # ./website/docs/guides/version-2-upgrade.html.md should still include pre-0.12 syntax,
+            if [[ "$filename" == "./docs/guides/version-2-upgrade.html.md" ]]; then
+                # ./docs/guides/version-2-upgrade.html.md should still include pre-0.12 syntax,
                 # since v1.0 does not support Terraform 0.12.
                 rules+=(
                 "--disable-rule=terraform_deprecated_interpolation"
                 "--disable-rule=terraform_deprecated_index"
                 )
-            elif [[ "$filename" == "./website/docs/guides/version-3-upgrade.html.md" ]]; then
-                # ./website/docs/guides/version-3-upgrade.html.md has one example showing migration from
+            elif [[ "$filename" == "./docs/guides/version-3-upgrade.html.md" ]]; then
+                # ./docs/guides/version-3-upgrade.html.md has one example showing migration from
                 # pre-0.12 syntax to 0.12 syntax. We can't customize rules per block, and adding a
                 # tflint-ignore directive to documentation is not ideal.
                 rules+=(
@@ -159,6 +159,6 @@ jobs:
             lint_exitcode=$?
             set -e
             if [ $lint_exitcode -ne 0 ]; then exit_code=1; fi
-          done < <(find ./website/docs -type f \( -name '*.md' -o -name '*.markdown' \) | sort -u)
+          done < <(find ./docs -type f \( -name '*.md' -o -name '*.markdown' \) | sort -u)
 
           exit $exit_code
