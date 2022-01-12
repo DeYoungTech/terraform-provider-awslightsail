@@ -600,7 +600,7 @@ resource "awslightsail_database" "test" {
   availability_zone       = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name    = "testdatabasename"
   master_password         = "testdatabasepassword"
-  master_username          = "test"
+  master_username         = "test"
   blueprint_id            = "mysql_8_0"
   bundle_id               = "micro_1_0"
   preferred_backup_window = %[2]q
@@ -619,7 +619,7 @@ resource "awslightsail_database" "test" {
   availability_zone            = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name         = "testdatabasename"
   master_password              = "testdatabasepassword"
-  master_username               = "test"
+  master_username              = "test"
   blueprint_id                 = "mysql_8_0"
   bundle_id                    = "micro_1_0"
   preferred_maintenance_window = %[2]q
@@ -638,7 +638,7 @@ resource "awslightsail_database" "test" {
   availability_zone    = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name = "testdatabasename"
   master_password      = "testdatabasepassword"
-  master_username       = "test"
+  master_username      = "test"
   blueprint_id         = "mysql_8_0"
   bundle_id            = "micro_1_0"
   publicly_accessible  = %[2]q
@@ -676,7 +676,7 @@ resource "awslightsail_database" "test" {
   availability_zone    = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name = "test"
   master_password      = "testdatabasepassword"
-  master_username       = "test"
+  master_username      = "test"
   blueprint_id         = "mysql_8_0"
   bundle_id            = "micro_1_0"
   final_snapshot_name  = %[2]q
@@ -693,7 +693,7 @@ resource "awslightsail_database" "test" {
   availability_zone    = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name = "testdatabasename"
   master_password      = "testdatabasepassword"
-  master_username       = "test"
+  master_username      = "test"
   blueprint_id         = "mysql_8_0"
   bundle_id            = "micro_1_0"
   skip_final_snapshot  = true
@@ -713,7 +713,7 @@ resource "awslightsail_database" "test" {
   availability_zone    = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name = "testdatabasename"
   master_password      = "testdatabasepassword"
-  master_username       = "test"
+  master_username      = "test"
   blueprint_id         = "mysql_8_0"
   bundle_id            = "micro_1_0"
   skip_final_snapshot  = true
