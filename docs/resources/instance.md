@@ -110,5 +110,5 @@ In addition to all arguments above, the following attributes are exported:
 Lightsail Instances can be imported using their name, e.g.,
 
 ``` shell
-terraform import awslightsail__instance.gitlab_test 'custom gitlab'
+terraform import awslightsail_instance.gitlab_test 'custom gitlab'
 ```
