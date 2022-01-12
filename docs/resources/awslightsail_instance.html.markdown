@@ -104,7 +104,7 @@ In addition to all arguments above, the following attributes are exported:
 * `created_at` - The timestamp when the instance was created.
 * `ipv6_address` - (**Deprecated**) The first IPv6 address of the Lightsail instance. Use `ipv6_addresses` attribute instead.
 * `ipv6_addresses` - List of IPv6 addresses for the Lightsail instance.
-* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block).
+* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
 
 ## Import
 

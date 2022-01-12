@@ -29,6 +29,7 @@ The following arguments are supported:
 
 * `domain_name` - (Required) The name of the Lightsail domain to manage
 * `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
+* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
 
 ## Attributes Reference
 
