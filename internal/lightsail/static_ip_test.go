@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/testhelper"
 	sdkacctest "github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -39,7 +40,7 @@ func TestAccStaticIP_disappears(t *testing.T) {
 	lName := fmt.Sprintf("tf-test-lightsail-%d", sdkacctest.RandInt())
 
 	staticIpDestroy := func(*terraform.State) error {
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 		_, err := conn.ReleaseStaticIp(context.TODO(), &lightsail.ReleaseStaticIpInput{
 			StaticIpName: aws.String(lName),
 		})
@@ -78,7 +79,7 @@ func testAccCheckStaticIPExists(n string) resource.TestCheckFunc {
 			return errors.New("No Lightsail Static IP ID is set")
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		resp, err := conn.GetStaticIp(context.TODO(), &lightsail.GetStaticIpInput{
 			StaticIpName: aws.String(rs.Primary.ID),
@@ -102,7 +103,7 @@ func testAccCheckStaticIPDestroy(s *terraform.State) error {
 			continue
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		resp, err := conn.GetStaticIp(context.TODO(), &lightsail.GetStaticIpInput{
 			StaticIpName: aws.String(rs.Primary.ID),

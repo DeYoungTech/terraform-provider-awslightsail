@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/testhelper"
 	sdkacctest "github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -128,7 +129,7 @@ func TestAccInstance_disappears(t *testing.T) {
 
 	testDestroy := func(*terraform.State) error {
 		// reach out and DELETE the Instance
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 		_, err := conn.DeleteInstance(context.TODO(), &lightsail.DeleteInstanceInput{
 			InstanceName: aws.String(lName),
 		})
@@ -170,7 +171,7 @@ func testAccCheckInstanceExists(n string) resource.TestCheckFunc {
 			return errors.New("No Instance ID is set")
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		respInstance, err := conn.GetInstance(context.TODO(), &lightsail.GetInstanceInput{
 			InstanceName: aws.String(rs.Primary.Attributes["name"]),
@@ -194,7 +195,7 @@ func testAccCheckInstanceDestroy(s *terraform.State) error {
 			continue
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		respInstance, err := conn.GetInstance(context.TODO(), &lightsail.GetInstanceInput{
 			InstanceName: aws.String(rs.Primary.Attributes["name"]),
@@ -229,7 +230,7 @@ resource "awslightsail_instance" "instance" {
   availability_zone = data.awslightsail_availability_zones.all.names[0]
   blueprint_id      = "amazon_linux"
   bundle_id         = "nano_1_0"
-  tags ={
+  tags = {
   }
 }
 `, lName)

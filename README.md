@@ -1,4 +1,4 @@
-# Terraform Provider for AWS Lightsail (CURRENTLY A WORK IN PROGRESS)
+# Terraform Provider for AWS Lightsail
 A terraform provider for AWS Lightsail using `aws-sdk-go-v2`.
 
 ```

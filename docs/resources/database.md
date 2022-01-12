@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "AWS Lightsail: awslightsail_database"
 description: |-
   Provides a Lightsail Database
@@ -45,24 +44,25 @@ The following arguments are supported:
 * `backup_retention_enabled` - When true, enables automated backup retention for your database. When false, disables automated backup retention for your database. Disabling backup retention deletes all automated database backups. Before disabling this, you may want to create a snapshot of your database.
 * `skip_final_snapshot` - Determines whether a final database snapshot is created before your database is deleted. If true is specified, no database snapshot is created. If false is specified, a database snapshot is created before your database is deleted. You must specify the final relational database snapshot name parameter if the skip final snapshot parameter is false.
 * `final_snapshot_name` - (Required unless `skip_final_snapshot = true`) The name of the database snapshot created if skip final snapshot is false, which is the default value for that parameter.
-* `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value.
+* `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
 
 ## Availability Zones
+
 Lightsail currently supports the following Availability Zones (e.g. `us-east-1a`):
 
-- `ap-northeast-1{a,c,d}`
-- `ap-northeast-2{a,c}`
-- `ap-south-1{a,b}`
-- `ap-southeast-1{a,b,c}`
-- `ap-southeast-2{a,b,c}`
-- `ca-central-1{a,b}`
-- `eu-central-1{a,b,c}`
-- `eu-west-1{a,b,c}`
-- `eu-west-2{a,b,c}`
-- `eu-west-3{a,b,c}`
-- `us-east-1{a,b,c,d,e,f}`
-- `us-east-2{a,b,c}`
-- `us-west-2{a,b,c}`
+* `ap-northeast-1{a,c,d}`
+* `ap-northeast-2{a,c}`
+* `ap-south-1{a,b}`
+* `ap-southeast-1{a,b,c}`
+* `ap-southeast-2{a,b,c}`
+* `ca-central-1{a,b}`
+* `eu-central-1{a,b,c}`
+* `eu-west-1{a,b,c}`
+* `eu-west-2{a,b,c}`
+* `eu-west-3{a,b,c}`
+* `us-east-1{a,b,c,d,e,f}`
+* `us-east-2{a,b,c}`
+* `us-west-2{a,b,c}`
 
 ## Bundles
 
@@ -72,16 +72,16 @@ Lightsail currently supports the following Bundle IDs (e.g. an instance in `ap-n
 
 A Bundle ID starts with one of the below size prefixes:
 
-- `micro_`
-- `small_`
-- `medium_`
-- `large_`
+* `micro_`
+* `small_`
+* `medium_`
+* `large_`
 
 ### Infixes (Optional for HA Database)
 
 A Bundle Id can have the following infix added in order to use the HA option of the selected bundle.
 
-- `ha_`
+* `ha_`
 
 ### Suffix
 
@@ -104,11 +104,12 @@ In addition to all arguments above, the following attributes are exported:
 * `master_endpoint_address` - The master endpoint fqdn for the database.
 * `secondary_availability_zone` - Describes the secondary Availability Zone of a high availability database. The secondary database is used for failover support of a high availability database.
 * `support_code` - The support code for the database. Include this code in your email to support when you have questions about a database in Lightsail. This code enables our support team to look up your Lightsail information more easily.
+* `tags_all` - A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
 
 ## Import
 
 Lightsail Databases can be imported using their name, e.g.
 
 ``` shell
-$ terraform import awslightsail_database.foo 'bar'
+terraform import awslightsail_database.foo 'bar'
 ```

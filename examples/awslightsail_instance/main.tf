@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    lightsail = {
+    awslightsail = {
       source  = "registry.terraform.io/deyoungtech/awslightsail"
       version = "~> 0.1.0"
     }
@@ -8,7 +8,13 @@ terraform {
 }
 
 provider "awslightsail" {
-    // region = "us-east-1"
+ default_tags {
+   tags = {
+     Environment = "Testing"
+     Owner       = "TFProviders"
+     Project     = "Testproject"
+   }
+ }
 }
 
 data "awslightsail_availability_zones" "all" {}

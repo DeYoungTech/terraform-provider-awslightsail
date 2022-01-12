@@ -10,18 +10,20 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/tftags"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/verify"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func ResourceDatabase() *schema.Resource {
 	return &schema.Resource{
-		Create: ResourceDatabaseCreate,
-		Read:   ResourceDatabaseRead,
-		Update: ResourceDatabaseUpdate,
-		Delete: ResourceDatabaseDelete,
+		Create: resourceDatabaseCreate,
+		Read:   resourceDatabaseRead,
+		Update: resourceDatabaseUpdate,
+		Delete: resourceDatabaseDelete,
 		Importer: &schema.ResourceImporter{
-			State: ResourceDatabaseImport,
+			State: resourceDatabaseImport,
 		},
 
 		Schema: map[string]*schema.Schema{
@@ -144,14 +146,17 @@ func ResourceDatabase() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"tags": TagsSchema(),
+			"tags":     TagsSchema(),
+			"tags_all": TagsSchemaComputed(),
 		},
+		CustomizeDiff: verify.SetTagsDiff,
 	}
 }
 
-func ResourceDatabaseCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
-	tags := tftags.New(d.Get("tags").(map[string]interface{}))
+func resourceDatabaseCreate(d *schema.ResourceData, meta interface{}) error {
+	conn := meta.(*conns.AWSClient).LightsailConn
+	defaultTagsConfig := meta.(*conns.AWSClient).DefaultTagsConfig
+	tags := defaultTagsConfig.MergeTags(tftags.New(d.Get("tags").(map[string]interface{})))
 
 	req := lightsail.CreateRelationalDatabaseInput{
 		MasterDatabaseName:            aws.String(d.Get("master_database_name").(string)),
@@ -241,11 +246,13 @@ func ResourceDatabaseCreate(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("Error waiting for Relational Database (%s) to become available: %s", d.Id(), err)
 	}
 
-	return ResourceDatabaseRead(d, meta)
+	return resourceDatabaseRead(d, meta)
 }
 
-func ResourceDatabaseRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+func resourceDatabaseRead(d *schema.ResourceData, meta interface{}) error {
+	conn := meta.(*conns.AWSClient).LightsailConn
+	defaultTagsConfig := meta.(*conns.AWSClient).DefaultTagsConfig
+	ignoreTagsConfig := meta.(*conns.AWSClient).IgnoreTagsConfig
 
 	// Some Operations can complete before the Database enters the Available state. Added a waiter to make sure the Database is available before continuing.
 	// This is to support importing a resource that is not in a ready state.
@@ -308,18 +315,22 @@ func ResourceDatabaseRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("secondary_availability_zone", rd.SecondaryAvailabilityZone)
 	d.Set("support_code", rd.SupportCode)
 
-	tags := KeyValueTags(rd.Tags).IgnoreAWS()
+	tags := KeyValueTags(rd.Tags).IgnoreAWS().IgnoreConfig(ignoreTagsConfig)
 
 	//lintignore:AWSR002
-	if err := d.Set("tags", tags.Map()); err != nil {
+	if err := d.Set("tags", tags.RemoveDefaultConfig(defaultTagsConfig).Map()); err != nil {
 		return fmt.Errorf("error setting tags: %w", err)
+	}
+
+	if err := d.Set("tags_all", tags.Map()); err != nil {
+		return fmt.Errorf("error setting tags_all: %w", err)
 	}
 
 	return nil
 }
 
-func ResourceDatabaseDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+func resourceDatabaseDelete(d *schema.ResourceData, meta interface{}) error {
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	// Some Operations can complete before the Database enters the Available state. Added a waiter to make sure the Database is available before continuing.
 	err := waitDatabaseModified(conn, aws.String(d.Id()))
@@ -359,7 +370,7 @@ func ResourceDatabaseDelete(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func ResourceDatabaseImport(
+func resourceDatabaseImport(
 	d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
 	// Neither skip_final_snapshot nor final_snapshot_identifier can be fetched
 	// from any API call, so we need to default skip_final_snapshot to true so
@@ -368,8 +379,8 @@ func ResourceDatabaseImport(
 	return []*schema.ResourceData{d}, nil
 }
 
-func ResourceDatabaseUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+func resourceDatabaseUpdate(d *schema.ResourceData, meta interface{}) error {
+	conn := meta.(*conns.AWSClient).LightsailConn
 	requestUpdate := false
 
 	req := lightsail.UpdateRelationalDatabaseInput{
@@ -451,5 +462,5 @@ func ResourceDatabaseUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	return ResourceDatabaseRead(d, meta)
+	return resourceDatabaseRead(d, meta)
 }

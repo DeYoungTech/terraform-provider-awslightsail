@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -38,7 +39,7 @@ func ResourceStaticIPAttachment() *schema.Resource {
 }
 
 func resourceStaticIPAttachmentCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	staticIpName := d.Get("static_ip_name").(string)
 	log.Printf("[INFO] Attaching Lightsail Static IP: %q", staticIpName)
@@ -64,7 +65,7 @@ func resourceStaticIPAttachmentCreate(d *schema.ResourceData, meta interface{}) 
 }
 
 func resourceStaticIPAttachmentRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	log.Printf("[INFO] Reading Lightsail Static IP: %q", d.Id())
 	resp, err := conn.GetStaticIp(context.TODO(), &lightsail.GetStaticIpInput{
@@ -93,7 +94,7 @@ func resourceStaticIPAttachmentRead(d *schema.ResourceData, meta interface{}) er
 }
 
 func resourceStaticIPAttachmentDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	resp, err := conn.DetachStaticIp(context.TODO(), &lightsail.DetachStaticIpInput{
 		StaticIpName: aws.String(d.Id()),

@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -41,7 +42,7 @@ func ResourceStaticIP() *schema.Resource {
 }
 
 func resourceStaticIPCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	name := d.Get("name").(string)
 	log.Printf("[INFO] Allocating Lightsail Static IP: %q", name)
@@ -69,7 +70,7 @@ func resourceStaticIPCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceStaticIPRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	name := d.Get("name").(string)
 	log.Printf("[INFO] Reading Lightsail Static IP: %q", name)
@@ -94,7 +95,7 @@ func resourceStaticIPRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceStaticIPDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	name := d.Get("name").(string)
 	log.Printf("[INFO] Deleting Lightsail Static IP: %q", name)
