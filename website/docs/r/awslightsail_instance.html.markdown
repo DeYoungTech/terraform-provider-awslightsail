@@ -41,24 +41,25 @@ instance (see list below)
 * `key_pair_name` - (Optional) The name of your key pair. Created in the
 Lightsail console (cannot use `aws_key_pair` at this time)
 * `user_data` - (Optional) launch script to configure server with additional user data
-* `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.
+* `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value. If configured with a provider `default_tags` configuration block present, tags with matching keys will overwrite those defined at the provider-level.
 
 ## Availability Zones
+
 Lightsail currently supports the following Availability Zones (e.g., `us-east-1a`):
 
-- `ap-northeast-1{a,c,d}`
-- `ap-northeast-2{a,c}`
-- `ap-south-1{a,b}`
-- `ap-southeast-1{a,b,c}`
-- `ap-southeast-2{a,b,c}`
-- `ca-central-1{a,b}`
-- `eu-central-1{a,b,c}`
-- `eu-west-1{a,b,c}`
-- `eu-west-2{a,b,c}`
-- `eu-west-3{a,b,c}`
-- `us-east-1{a,b,c,d,e,f}`
-- `us-east-2{a,b,c}`
-- `us-west-2{a,b,c}`
+* `ap-northeast-1{a,c,d}`
+* `ap-northeast-2{a,c}`
+* `ap-south-1{a,b}`
+* `ap-southeast-1{a,b,c}`
+* `ap-southeast-2{a,b,c}`
+* `ca-central-1{a,b}`
+* `eu-central-1{a,b,c}`
+* `eu-west-1{a,b,c}`
+* `eu-west-2{a,b,c}`
+* `eu-west-3{a,b,c}`
+* `us-east-1{a,b,c,d,e,f}`
+* `us-east-2{a,b,c}`
+* `us-west-2{a,b,c}`
 
 ## Bundles
 
@@ -68,31 +69,31 @@ Lightsail currently supports the following Bundle IDs (e.g., an instance in `ap-
 
 A Bundle ID starts with one of the below size prefixes:
 
-- `nano_`
-- `micro_`
-- `small_`
-- `medium_`
-- `large_`
-- `xlarge_`
-- `2xlarge_`
+* `nano_`
+* `micro_`
+* `small_`
+* `medium_`
+* `large_`
+* `xlarge_`
+* `2xlarge_`
 
 ### Suffix
 
 A Bundle ID ends with one of the following suffixes depending on Availability Zone:
 
-- ap-northeast-1: `2_0`
-- ap-northeast-2: `2_0`
-- ap-south-1: `2_1`
-- ap-southeast-1: `2_0`
-- ap-southeast-2: `2_2`
-- ca-central-1: `2_0`
-- eu-central-1: `2_0`
-- eu-west-1: `2_0`
-- eu-west-2: `2_0`
-- eu-west-3: `2_0`
-- us-east-1: `2_0`
-- us-east-2: `2_0`
-- us-west-2: `2_0`
+* ap-northeast-1: `2_0`
+* ap-northeast-2: `2_0`
+* ap-south-1: `2_1`
+* ap-southeast-1: `2_0`
+* ap-southeast-2: `2_2`
+* ca-central-1: `2_0`
+* eu-central-1: `2_0`
+* eu-west-1: `2_0`
+* eu-west-2: `2_0`
+* eu-west-3: `2_0`
+* us-east-1: `2_0`
+* us-east-2: `2_0`
+* us-west-2: `2_0`
 
 ## Attributes Reference
 
@@ -109,6 +110,6 @@ In addition to all arguments above, the following attributes are exported:
 
 Lightsail Instances can be imported using their name, e.g.,
 
-```
-$ terraform import awslightsail__instance.gitlab_test 'custom gitlab'
+``` shell
+terraform import awslightsail__instance.gitlab_test 'custom gitlab'
 ```

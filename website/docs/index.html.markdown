@@ -68,27 +68,23 @@ resource "awslightsail_instance" "test" {
 Usage:
 
 ```sh
-$ export AWS_ACCESS_KEY_ID="anaccesskey"
-$ export AWS_SECRET_ACCESS_KEY="asecretkey"
-$ export AWS_REGION="us-west-2"
-$ terraform plan
+export AWS_ACCESS_KEY_ID="anaccesskey"
+export AWS_SECRET_ACCESS_KEY="asecretkey"
+export AWS_REGION="us-west-2"
+terraform plan
 ```
 
 ## Authentication
 
-Currently the awslightsail provider is using the default configuration for the aws sdk for go v2. This is documented here: https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#specifying-credentials
+Currently the awslightsail provider is using the default configuration for the aws sdk for go v2. This is documented here: ["aws-sdk-go-v2 documentation"](https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#specifying-credentials)
 
 The short version is that it will attempt to autheticate using the following order of configurations:
 
 1. Use IAM roles for tasks if your application uses an ECS task definition or RunTask API operation.
 
-2. Use IAM roles for Amazon EC2 (if your application is running on an Amazon EC2 instance).
+2. Use IAM roles for Amazon EC2 (if your application is running on an Amazon EC2 instance). IAM roles provide applications on the instance temporary security credentials to make AWS calls. IAM roles provide an easy way to distribute and manage credentials on multiple Amazon EC2 instances.
 
-IAM roles provide applications on the instance temporary security credentials to make AWS calls. IAM roles provide an easy way to distribute and manage credentials on multiple Amazon EC2 instances.
-
-3. Use shared credentials or config files.
-
-The credentials and config files are shared across other AWS SDKs and AWS CLI. As a security best practice, we recommend using credentials file for setting sensitive values such as access key IDs and secret keys. Here are the formatting requirements for each of these files.
+3. Use shared credentials or config files. The credentials and config files are shared across other AWS SDKs and AWS CLI. As a security best practice, we recommend using credentials file for setting sensitive values such as access key IDs and secret keys. Here are the formatting requirements for each of these files.
 
 4. Use environment variables.
 
@@ -101,7 +97,6 @@ AWS credentials using either these (or legacy) environment variables
 will override the use of `AWS_SHARED_CREDENTIALS_FILE` and `AWS_PROFILE`.
 The `AWS_DEFAULT_REGION` and `AWS_SESSION_TOKEN` environment variables
 are also used, if applicable:
-
 
 ## Argument Reference
 
@@ -116,7 +111,6 @@ In addition to [generic `provider` arguments](https://www.terraform.io/docs/conf
 * `default_tags` - (Optional) Configuration block with resource tag settings to apply across all resources handled by this provider. This is designed to replace redundant per-resource `tags` configurations. Provider tags can be overridden with new values, but not excluded from specific resources. To override provider tag values, use the `tags` argument within a resource to configure new tag values for matching keys. See the [`default_tags`](#default_tags-configuration-block) Configuration Block section below for example usage and available arguments. This functionality is supported in all resources that implement `tags`.
 
 * `ignore_tags` - (Optional) Configuration block with resource tag settings to ignore across all resources handled by this provider for situations where external systems are managing certain resource tags. Arguments to the configuration block are described below in the `ignore_tags` Configuration Block section.
-
 
 ### default_tags Configuration Block
 
