@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "AWS: awslightsail_static_ip"
 description: |-
   Provides an Lightsail Static IP

@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "AWS Lightsail: awslightsail_database"
 description: |-
   Provides a Lightsail Database

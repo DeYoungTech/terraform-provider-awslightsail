@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "AWS Lightsail: awslightsail_key_pair"
 description: |-
   Provides an Lightsail Key Pair

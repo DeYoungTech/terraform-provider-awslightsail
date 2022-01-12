@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "AWS Lightsail: awslightsail__instance"
 description: |-
   Provides an Lightsail Instance

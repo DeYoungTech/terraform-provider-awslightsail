@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "AWS Lightsail: awslightsail_static_ip_attachment"
 description: |-
   Provides an Lightsail Static IP Attachment

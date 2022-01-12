@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "AWS Lightsail: awslightsail_domain"
 description: |-
   Provides an Lightsail Domain
