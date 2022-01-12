@@ -45,7 +45,7 @@ The following arguments are supported:
 * `backup_retention_enabled` - When true, enables automated backup retention for your database. When false, disables automated backup retention for your database. Disabling backup retention deletes all automated database backups. Before disabling this, you may want to create a snapshot of your database.
 * `skip_final_snapshot` - Determines whether a final database snapshot is created before your database is deleted. If true is specified, no database snapshot is created. If false is specified, a database snapshot is created before your database is deleted. You must specify the final relational database snapshot name parameter if the skip final snapshot parameter is false.
 * `final_snapshot_name` - (Required unless `skip_final_snapshot = true`) The name of the database snapshot created if skip final snapshot is false, which is the default value for that parameter.
-* `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value.
+* `tags` - (Optional) A map of tags to assign to the resource. To create a key-only tag, use an empty string as the value. If configured with a provider [`default_tags` configuration block](/docs/providers/aws/index.html#default_tags-configuration-block) present, tags with matching keys will overwrite those defined at the provider-level.
 
 ## Availability Zones
 Lightsail currently supports the following Availability Zones (e.g. `us-east-1a`):

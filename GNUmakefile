@@ -28,6 +28,11 @@ testacc: fmtcheck
 fmt:
 	@echo "==> Fixing source code with gofmt..."
 	gofmt -s -w ./$(PKG_NAME) $(filter-out ./providerlint/go% ./providerlint/README.md ./providerlint/vendor, $(wildcard ./providerlint/*))
+	@echo "==> Fixing source code with terraform fmt..."
+	find ./$(PKG_NAME)/lightsail -type f -name '*_test.go' | sort -u | xargs -I {}  ~/go/bin/terrafmt fmt  --fmtcompat {}
+	@echo "==> Fixing website docs with terraform fmt..."
+	~/go/bin/terrafmt fmt ./website/ --pattern '*.markdown'
+
 
 # Currently required by tf-deploy compile
 fmtcheck:

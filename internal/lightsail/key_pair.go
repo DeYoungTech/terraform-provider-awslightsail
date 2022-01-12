@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail/types"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/helper/encryption"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -79,7 +80,7 @@ func ResourceKeyPair() *schema.Resource {
 }
 
 func resourceKeyPairCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	var kName string
 	if v, ok := d.GetOk("name"); ok {
@@ -163,7 +164,7 @@ func resourceKeyPairCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceKeyPairRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	resp, err := conn.GetKeyPair(context.TODO(), &lightsail.GetKeyPairInput{
 		KeyPairName: aws.String(d.Id()),
@@ -186,7 +187,7 @@ func resourceKeyPairRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceKeyPairDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 	resp, err := conn.DeleteKeyPair(context.TODO(), &lightsail.DeleteKeyPairInput{
 		KeyPairName: aws.String(d.Id()),
 	})

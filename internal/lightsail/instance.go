@@ -11,7 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/tftags"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/verify"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -118,15 +120,18 @@ func ResourceInstance() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"tags": TagsSchema(),
+			"tags":     TagsSchema(),
+			"tags_all": TagsSchemaComputed(),
 		},
+		CustomizeDiff: verify.SetTagsDiff,
 	}
 }
 
 func resourceInstanceCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 	iName := d.Get("name").(string)
-	tags := tftags.New(d.Get("tags").(map[string]interface{}))
+	defaultTagsConfig := meta.(*conns.AWSClient).DefaultTagsConfig
+	tags := defaultTagsConfig.MergeTags(tftags.New(d.Get("tags").(map[string]interface{})))
 
 	req := lightsail.CreateInstancesInput{
 		AvailabilityZone: aws.String(d.Get("availability_zone").(string)),
@@ -167,7 +172,9 @@ func resourceInstanceCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
+	defaultTagsConfig := meta.(*conns.AWSClient).DefaultTagsConfig
+	ignoreTagsConfig := meta.(*conns.AWSClient).IgnoreTagsConfig
 
 	resp, err := conn.GetInstance(context.TODO(), &lightsail.GetInstanceInput{
 		InstanceName: aws.String(d.Id()),
@@ -213,18 +220,22 @@ func resourceInstanceRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("private_ip_address", i.PrivateIpAddress)
 	d.Set("public_ip_address", i.PublicIpAddress)
 
-	tags := KeyValueTags(i.Tags).IgnoreAWS()
+	tags := KeyValueTags(i.Tags).IgnoreAWS().IgnoreConfig(ignoreTagsConfig)
 
 	//lintignore:AWSR002
-	if err := d.Set("tags", tags.Map()); err != nil {
+	if err := d.Set("tags", tags.RemoveDefaultConfig(defaultTagsConfig).Map()); err != nil {
 		return fmt.Errorf("error setting tags: %w", err)
+	}
+
+	if err := d.Set("tags_all", tags.Map()); err != nil {
+		return fmt.Errorf("error setting tags_all: %w", err)
 	}
 
 	return nil
 }
 
 func resourceInstanceDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
 	resp, err := conn.DeleteInstance(context.TODO(), &lightsail.DeleteInstanceInput{
 		InstanceName: aws.String(d.Id()),
@@ -245,10 +256,10 @@ func resourceInstanceDelete(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*lightsail.Client)
+	conn := meta.(*conns.AWSClient).LightsailConn
 
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
+	if d.HasChange("tags_all") {
+		o, n := d.GetChange("tags_all")
 
 		if err := UpdateTags(conn, d.Id(), o, n); err != nil {
 			return fmt.Errorf("error updating Lightsail Instance (%s) tags: %s", d.Id(), err)

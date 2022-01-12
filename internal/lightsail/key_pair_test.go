@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/testhelper"
 	sdkacctest "github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -120,7 +121,7 @@ func testAccCheckKeyPairExists(n string) resource.TestCheckFunc {
 			return errors.New("No KeyPair set")
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		respKeyPair, err := conn.GetKeyPair(context.TODO(), &lightsail.GetKeyPairInput{
 			KeyPairName: aws.String(rs.Primary.Attributes["name"]),
@@ -144,7 +145,7 @@ func testAccCheckKeyPairDestroy(s *terraform.State) error {
 			continue
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		respKeyPair, err := conn.GetKeyPair(context.TODO(), &lightsail.GetKeyPairInput{
 			KeyPairName: aws.String(rs.Primary.Attributes["name"]),
@@ -181,7 +182,7 @@ resource "awslightsail_key_pair" "test" {
 func testAccKeyPairConfig_imported(lightsailName, publicKey string) string {
 	return fmt.Sprintf(`
 resource "awslightsail_key_pair" "test" {
-  name = %[1]q
+  name       = %[1]q
   public_key = "%[2]s"
 }
 `, lightsailName, publicKey)
@@ -190,7 +191,7 @@ resource "awslightsail_key_pair" "test" {
 func testAccKeyPairConfig_encrypted(lightsailName, key string) string {
 	return fmt.Sprintf(`
 resource "awslightsail_key_pair" "test" {
-  name = %[1]q
+  name    = %[1]q
   pgp_key = <<EOF
 %[2]s
 EOF

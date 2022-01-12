@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/testhelper"
 	sdkacctest "github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -398,7 +399,7 @@ func TestAccDatabase_disappears(t *testing.T) {
 
 	testDestroy := func(*terraform.State) error {
 		// reach out and DELETE the Database
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		_, err := conn.DeleteRelationalDatabase(context.TODO(), &lightsail.DeleteRelationalDatabaseInput{
 			RelationalDatabaseName: aws.String(lName),
@@ -441,7 +442,7 @@ func testAccCheckAWSDatabaseExists(n string) resource.TestCheckFunc {
 			return errors.New("No Lightsail Database ID is set")
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		params := lightsail.GetRelationalDatabaseInput{
 			RelationalDatabaseName: aws.String(rs.Primary.ID),
@@ -462,7 +463,7 @@ func testAccCheckAWSDatabaseExists(n string) resource.TestCheckFunc {
 }
 
 func testAccCheckAWSDatabaseDestroy(s *terraform.State) error {
-	conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+	conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "awslightsail_database" {
@@ -494,7 +495,7 @@ func testAccCheckAWSDatabaseDestroy(s *terraform.State) error {
 }
 
 func testAccCheckAWSDatabaseSnapshotDestroy(s *terraform.State) error {
-	conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+	conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "awslightsail_database" {
@@ -540,7 +541,7 @@ func testAccCheckAWSDatabaseSnapshotDestroy(s *terraform.State) error {
 }
 
 func testAccDatabaseConfigBasic(lName string) string {
-	return fmt.Sprintf(`	
+	return fmt.Sprintf(`
 data "awslightsail_availability_zones" "all" {}
 
 resource "awslightsail_database" "test" {
@@ -548,7 +549,7 @@ resource "awslightsail_database" "test" {
   availability_zone    = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name = "testdatabasename"
   master_password      = "testdatabasepassword"
-  master_username       = "test"
+  master_username      = "test"
   blueprint_id         = "mysql_8_0"
   bundle_id            = "micro_1_0"
   skip_final_snapshot  = true
@@ -557,7 +558,7 @@ resource "awslightsail_database" "test" {
 }
 
 func testAccDatabaseConfigMasterDatabaseName(lName string, masterDatabaseName string) string {
-	return fmt.Sprintf(`	
+	return fmt.Sprintf(`
 data "awslightsail_availability_zones" "all" {}
 
 resource "awslightsail_database" "test" {
@@ -565,12 +566,12 @@ resource "awslightsail_database" "test" {
   availability_zone    = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name = %[2]q
   master_password      = "testdatabasepassword"
-  master_username       = "test"
+  master_username      = "test"
   blueprint_id         = "mysql_8_0"
   bundle_id            = "micro_1_0"
   skip_final_snapshot  = true
 }
-`, lName, masterDatabaseName)
+	`, lName, masterDatabaseName)
 }
 
 func testAccDatabaseConfigmasterUserName(lName string, masterUserName string) string {
@@ -582,12 +583,12 @@ resource "awslightsail_database" "test" {
   availability_zone    = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name = "testdatabasename"
   master_password      = "testdatabasepassword"
-  master_username       = %[2]q
+  master_username      = %[2]q
   blueprint_id         = "mysql_8_0"
   bundle_id            = "micro_1_0"
   skip_final_snapshot  = true
 }
-`, lName, masterUserName)
+	`, lName, masterUserName)
 }
 
 func testAccDatabaseConfigPreferredBackupWindow(lName string, preferredBackupWindow string) string {
@@ -656,7 +657,7 @@ resource "awslightsail_database" "test" {
   availability_zone        = data.awslightsail_availability_zones.all.database_names[0]
   master_database_name     = "test"
   master_password          = "testdatabasepassword"
-  master_username           = "test"
+  master_username          = "test"
   blueprint_id             = "mysql_8_0"
   bundle_id                = "micro_1_0"
   backup_retention_enabled = %[2]q

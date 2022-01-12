@@ -11,13 +11,36 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/smithy-go"
+	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/testhelper"
 	sdkacctest "github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-func TestAccDomain_basic(t *testing.T) {
+func TestAccDomain_serial(t *testing.T) {
+	testCases := map[string]map[string]func(t *testing.T){
+		"Domain": {
+			"basic":      testAccDomain_basic,
+			"disappears": testAccDomain_disappears,
+			"Tags":       testAccDomain_Tags,
+		},
+	}
+
+	for group, m := range testCases {
+		m := m
+		t.Run(group, func(t *testing.T) {
+			for name, tc := range m {
+				tc := tc
+				t.Run(name, func(t *testing.T) {
+					tc(t)
+				})
+			}
+		})
+	}
+}
+
+func testAccDomain_basic(t *testing.T) {
 	lName := fmt.Sprintf("tf-test-lightsail-%s.com", sdkacctest.RandString(5))
 	rName := "awslightsail_domain.test"
 
@@ -29,19 +52,63 @@ func TestAccDomain_basic(t *testing.T) {
 				Config: testAccDomainConfig_basic(lName),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					testAccCheckDomainExists(rName),
+					resource.TestCheckResourceAttr(rName, "tags.%", "0"),
 				),
 			},
 		},
 	})
 }
 
-func TestAccDomain_disappears(t *testing.T) {
+func testAccDomain_Tags(t *testing.T) {
+	lName := fmt.Sprintf("tf-test-lightsail-%s.com", sdkacctest.RandString(5))
+	lName2 := fmt.Sprintf("tf-test-lightsail-%s.com", sdkacctest.RandString(5))
+	lName3 := fmt.Sprintf("tf-test-lightsail-%s.com", sdkacctest.RandString(5))
+	rName := "awslightsail_domain.test"
+
+	resource.Test(t, resource.TestCase{
+		Providers: testhelper.GetProviders(),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDomainConfigTags1(lName, "key1", "value1"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckDomainExists(rName),
+					resource.TestCheckResourceAttr(rName, "tags.%", "1"),
+					resource.TestCheckResourceAttr(rName, "tags.key1", "value1"),
+				),
+			},
+			{
+				ResourceName:      rName,
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: testAccDomainConfigTags2(lName2, "key1", "value1updated", "key2", "value2"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckDomainExists(rName),
+					resource.TestCheckResourceAttr(rName, "tags.%", "2"),
+					resource.TestCheckResourceAttr(rName, "tags.key1", "value1updated"),
+					resource.TestCheckResourceAttr(rName, "tags.key2", "value2"),
+				),
+			},
+			{
+				Config: testAccDomainConfigTags1(lName3, "key2", "value2"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckDomainExists(rName),
+					resource.TestCheckResourceAttr(rName, "tags.%", "1"),
+					resource.TestCheckResourceAttr(rName, "tags.key2", "value2"),
+				),
+			},
+		},
+	})
+}
+
+func testAccDomain_disappears(t *testing.T) {
 	lName := fmt.Sprintf("tf-test-lightsail-%s.com", sdkacctest.RandString(5))
 	rName := "awslightsail_domain.test"
 
 	testDestroy := func(*terraform.State) error {
 		// reach out and DELETE the Instance
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 		_, err := conn.DeleteDomain(context.TODO(), &lightsail.DeleteDomainInput{
 			DomainName: aws.String(lName),
 		})
@@ -83,7 +150,7 @@ func testAccCheckDomainExists(n string) resource.TestCheckFunc {
 			return errors.New("No Lightsail Domain ID is set")
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		resp, err := conn.GetDomain(context.TODO(), &lightsail.GetDomainInput{
 			DomainName: aws.String(rs.Primary.ID),
@@ -107,7 +174,7 @@ func testAccCheckDomainDestroy(s *terraform.State) error {
 			continue
 		}
 
-		conn := testhelper.GetProvider().Meta().(*lightsail.Client)
+		conn := testhelper.GetProvider().Meta().(*conns.AWSClient).LightsailConn
 
 		resp, err := conn.GetDomain(context.TODO(), &lightsail.GetDomainInput{
 			DomainName: aws.String(rs.Primary.ID),
@@ -139,4 +206,27 @@ resource "awslightsail_domain" "test" {
   domain_name = "%s"
 }
 `, lName)
+}
+
+func testAccDomainConfigTags1(rName string, tagKey1, tagValue1 string) string {
+	return fmt.Sprintf(`
+resource "awslightsail_domain" "test" {
+  domain_name = %[1]q
+  tags = {
+    %[2]q = %[3]q
+  }
+}
+`, rName, tagKey1, tagValue1)
+}
+
+func testAccDomainConfigTags2(rName, tagKey1, tagValue1, tagKey2, tagValue2 string) string {
+	return fmt.Sprintf(`
+resource "awslightsail_domain" "test" {
+  domain_name = %[1]q
+  tags = {
+    %[2]q = %[3]q
+    %[4]q = %[5]q
+  }
+}
+`, rName, tagKey1, tagValue1, tagKey2, tagValue2)
 }
