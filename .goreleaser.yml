@@ -21,8 +21,12 @@ builds:
       - linux
       - windows
     ignore:
+      - goos: darwin
+        goarch: arm64
       - goarch: '386'
         goos: darwin
+      - goos: windows
+        goarch: arm64
     ldflags:
       - -s -w -X version.ProviderVersion={{.Version}}
     mod_timestamp: '{{ .CommitTimestamp }}'
