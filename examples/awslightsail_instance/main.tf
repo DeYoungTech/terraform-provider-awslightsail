@@ -2,13 +2,13 @@ terraform {
   required_providers {
     awslightsail = {
       source  = "registry.terraform.io/deyoungtech/awslightsail"
-      version = "~> 0.1.0"
     }
   }
 }
 
 provider "awslightsail" {
- default_tags {
+  region = "us-east-1"    
+  default_tags {
    tags = {
      Environment = "Testing"
      Owner       = "TFProviders"
