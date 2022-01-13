@@ -21,12 +21,8 @@ builds:
       - linux
       - windows
     ignore:
-      - goos: darwin
-        goarch: arm64
       - goarch: '386'
         goos: darwin
-      - goos: windows
-        goarch: arm64
     ldflags:
       - -s -w -X version.ProviderVersion={{.Version}}
     mod_timestamp: '{{ .CommitTimestamp }}'
@@ -37,8 +33,6 @@ checksum:
   algorithm: sha256
 env:
   - CGO_ENABLED=0
-release:
-  disable: true
 signs:
   - artifacts: checksum
     args:
