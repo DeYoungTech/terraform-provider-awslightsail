@@ -31,3 +31,9 @@ The following arguments are supported:
 * `type` - (Required) Type of record
 * `target` - (Required) Target of the domain entry
 * `is_alias` - (Optional) If the entry should be an alias Defaults to `false`
+
+## Attributes Reference
+
+In addition to all arguments above, the following attributes are exported:
+
+* `id` - A combination of attributes to create a unique id: `name`_`domain_name`_`type`_`target`
