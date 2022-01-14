@@ -55,10 +55,17 @@ func resourceDomainCreate(d *schema.ResourceData, meta interface{}) error {
 		req.Tags = Tags(tags.IgnoreAWS())
 	}
 
-	_, err := conn.CreateDomain(context.TODO(), &req)
+	resp, err := conn.CreateDomain(context.TODO(), &req)
 
 	if err != nil {
 		return err
+	}
+
+	op := resp.Operation
+
+	err = waitLightsailOperation(conn, op.Id)
+	if err != nil {
+		return fmt.Errorf("Error waiting for Domain (%s) to become ready: %s", d.Id(), err)
 	}
 
 	d.SetId(d.Get("domain_name").(string))
