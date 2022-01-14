@@ -10,7 +10,7 @@ Creates a domain entry resource
 
 ## Example Usage
 
-```hcl
+```terraform
 resource "awslightsail_domain" "test" {
   domain_name = "mydomain.com"
 }
