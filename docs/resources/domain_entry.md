@@ -11,15 +11,14 @@ Creates a domain entry resource
 ## Example Usage, creating a new domain
 
 ```hcl
-resource "awslightsail_domain" "domain_test" {
+resource "awslightsail_domain" "test" {
   domain_name = "mydomain.com"
 }
-resource "awslightsail_domain_entry" "entry_test" {
-  domain_name = "${awslightsail_domain.domain_test.domain_name}"
-  name        = "a3.${awslightsail_domain.domain_test.domain_name}"
+resource "awslightsail_domain_entry" "test" {
+  domain_name = awslightsail_domain.test.domain_name
+  name        = "test"
   type        = "A"
   target      = "127.0.0.1"
-  depends_on  = ["awslightsail_domain.domain_test"]
 }
 ```
 
