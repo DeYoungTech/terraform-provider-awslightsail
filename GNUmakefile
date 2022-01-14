@@ -31,7 +31,7 @@ fmt:
 	@echo "==> Fixing source code with terraform fmt..."
 	find ./$(PKG_NAME)/lightsail -type f -name '*_test.go' | sort -u | xargs -I {}  ~/go/bin/terrafmt fmt  --fmtcompat {}
 	@echo "==> Fixing docs with terraform fmt..."
-	~/go/bin/terrafmt fmt ./docs/ --pattern '*.markdown'
+	~/go/bin/terrafmt fmt ./docs/ --pattern '*.md'
 
 
 # Currently required by tf-deploy compile

@@ -38,6 +38,7 @@ type AWSClient struct {
 	DefaultTagsConfig *tftags.DefaultConfig
 	IgnoreTagsConfig  *tftags.IgnoreConfig
 	LightsailConn     *lightsail.Client
+	Region            string
 	TerraformVersion  string
 }
 
@@ -52,6 +53,7 @@ func (c *Config) Client() (interface{}, error) {
 		LightsailConn:     lightsail.NewFromConfig(cfg),
 		DefaultTagsConfig: c.DefaultTagsConfig,
 		TerraformVersion:  c.TerraformVersion,
+		Region:            c.Region,
 	}
 
 	return client, nil

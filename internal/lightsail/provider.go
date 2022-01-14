@@ -73,6 +73,7 @@ func Provider() *schema.Provider {
 			"awslightsail_key_pair":             ResourceKeyPair(),
 			"awslightsail_database":             ResourceDatabase(),
 			"awslightsail_domain":               ResourceDomain(),
+			"awslightsail_domain_entry":         ResourceDomainEntry(),
 			"awslightsail_instance":             ResourceInstance(),
 			"awslightsail_static_ip_attachment": ResourceStaticIPAttachment(),
 			"awslightsail_static_ip":            ResourceStaticIP(),
