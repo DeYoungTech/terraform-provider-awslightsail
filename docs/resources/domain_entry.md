@@ -8,7 +8,7 @@ description: |-
 
 Creates a domain entry resource
 
-## Example Usage, creating a new domain
+## Example Usage
 
 ```hcl
 resource "awslightsail_domain" "test" {

@@ -1,5 +1,4 @@
 ---
-layout: "awslightsail"
 page_title: "Provider: AWSLightsail"
 description: |-
   Use the Amazon Web Services (AWS) Lightsail provider to interact with the many resources supported by AWS Lightsail. You must configure the provider with the proper credentials before you can use it.
