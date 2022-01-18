@@ -1,8 +1,10 @@
 # Terraform Provider for AWS Lightsail
 A terraform provider for AWS Lightsail using `aws-sdk-go-v2`.
 
-```
-provider "awslightsail" {}
+```terraform
+provider "awslightsail" {
+  region = "us-east-1"
+}
 ```
 
 The Terraform AWS Lightsail provider is a plugin for Terraform that allows for the full lifecycle management of AWS Lightsail resources.
