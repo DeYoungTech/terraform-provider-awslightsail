@@ -13,7 +13,7 @@ Creates a domain entry resource. Each AWS account is limited to a single endpoin
 ```terraform
 resource "awslightsail_contact_method" "test" {
   endpoint = "test@test.com"
-  protocol        = "Email"
+  protocol = "Email"
 }
 ```
 
