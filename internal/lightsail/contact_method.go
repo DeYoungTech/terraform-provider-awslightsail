@@ -103,7 +103,7 @@ func resourceContactMethodRead(d *schema.ResourceData, meta interface{}) error {
 		return nil
 	}
 	d.Set("protocol", entry.Protocol)
-	d.Set("endpoint", string(aws.ToString(entry.ContactEndpoint)))
+	d.Set("endpoint", aws.ToString(entry.ContactEndpoint))
 
 	return nil
 }
