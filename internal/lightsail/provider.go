@@ -70,11 +70,12 @@ func Provider() *schema.Provider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"awslightsail_key_pair":             ResourceKeyPair(),
+			"awslightsail_contact_method":       ResourceContactMethod(),
 			"awslightsail_database":             ResourceDatabase(),
 			"awslightsail_domain":               ResourceDomain(),
 			"awslightsail_domain_entry":         ResourceDomainEntry(),
 			"awslightsail_instance":             ResourceInstance(),
+			"awslightsail_key_pair":             ResourceKeyPair(),
 			"awslightsail_static_ip_attachment": ResourceStaticIPAttachment(),
 			"awslightsail_static_ip":            ResourceStaticIP(),
 		},

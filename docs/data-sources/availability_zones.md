@@ -26,4 +26,4 @@ In addition to all arguments above, the following attributes are exported:
 
 * `id` - The Region name configured in the provider.
 * `names` - A list of the Availability Zone names available to the account.
-* `database_names` - Region of the Availability Zones.
+* `database_names` - A list of the Availability Zone names available to the account for Databases.
