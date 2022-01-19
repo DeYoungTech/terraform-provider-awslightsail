@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"testing"
-	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail/types"
@@ -32,7 +31,6 @@ func TestAccContactMethod_serial(t *testing.T) {
 				tc := tc
 				t.Run(name, func(t *testing.T) {
 					tc(t)
-					time.Sleep(3 * time.Second)
 				})
 			}
 		})
