@@ -19,14 +19,39 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
+// AWS Accounts are limited to 5 Load Balancers per account.
+func TestAccLoadBalancer_serial(t *testing.T) {
+	testCases := map[string]map[string]func(t *testing.T){
+		"LoadBalancer": {
+			"basic":           testAccLoadBalancer_basic,
+			"Name":            testAccLoadBalancer_Name,
+			"HealthCheckPath": testAccLoadBalancer_HealthCheckPath,
+			"IpAddressType":   testAccLoadBalancer_IpAddressType,
+			"Tags":            testAccLoadBalancer_Tags,
+			"disappears":      testAccLoadBalancer_disappears,
+		},
+	}
 
-func TestAccLoadBalancer_basic(t *testing.T) {
-	rName := "awslightsail_instance.instance"
+	for group, m := range testCases {
+		m := m
+		t.Run(group, func(t *testing.T) {
+			for name, tc := range m {
+				tc := tc
+				t.Run(name, func(t *testing.T) {
+					tc(t)
+				})
+			}
+		})
+	}
+}
+
+func testAccLoadBalancer_basic(t *testing.T) {
+	rName := "awslightsail_lb.test"
 	lName := acctest.RandomWithPrefix("tf-acc-test")
 
-	resource.ParallelTest(t, resource.TestCase{
+	resource.Test(t, resource.TestCase{
 		Providers:    testhelper.GetProviders(),
-		CheckDestroy:  testAccCheckLoadBalancerDestroy,
+		CheckDestroy: testAccCheckLoadBalancerDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccLoadBalancerConfigBasic(lName),
@@ -46,15 +71,15 @@ func TestAccLoadBalancer_basic(t *testing.T) {
 	})
 }
 
-func TestAccLoadBalancer_Name(t *testing.T) {
-	rName := "awslightsail_instance.instance"
+func testAccLoadBalancer_Name(t *testing.T) {
+	rName := "awslightsail_lb.test"
 	lName := acctest.RandomWithPrefix("tf-acc-test")
 	lightsailNameWithSpaces := fmt.Sprint(rName, "string with spaces")
 	lightsailNameWithStartingDigit := fmt.Sprintf("01-%s", rName)
 	lightsailNameWithUnderscore := fmt.Sprintf("%s_123456", rName)
 
-	resource.ParallelTest(t, resource.TestCase{
-		Providers:    testhelper.GetProviders(),
+	resource.Test(t, resource.TestCase{
+		Providers: testhelper.GetProviders(),
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccLoadBalancerConfigBasic(lightsailNameWithSpaces),
@@ -84,12 +109,12 @@ func TestAccLoadBalancer_Name(t *testing.T) {
 	})
 }
 
-func TestAccLoadBalancer_HealthCheckPath(t *testing.T) {
-	rName := "awslightsail_instance.instance"
+func testAccLoadBalancer_HealthCheckPath(t *testing.T) {
+	rName := "awslightsail_lb.test"
 	lName := acctest.RandomWithPrefix("tf-acc-test")
 
-	resource.ParallelTest(t, resource.TestCase{
-		Providers:    testhelper.GetProviders(),
+	resource.Test(t, resource.TestCase{
+		Providers: testhelper.GetProviders(),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccLoadBalancerConfigHealthCheckPath(lName, "/"),
@@ -114,12 +139,42 @@ func TestAccLoadBalancer_HealthCheckPath(t *testing.T) {
 	})
 }
 
-func TestAccLoadBalancer_Tags(t *testing.T) {
-	rName := "awslightsail_instance.instance"
+func testAccLoadBalancer_IpAddressType(t *testing.T) {
+	rName := "awslightsail_lb.test"
 	lName := acctest.RandomWithPrefix("tf-acc-test")
 
-	resource.ParallelTest(t, resource.TestCase{
-		Providers:    testhelper.GetProviders(),
+	resource.Test(t, resource.TestCase{
+		Providers: testhelper.GetProviders(),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccLoadBalancerConfigIpAddressType(lName, "ipv4"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckLoadBalancerExists(rName),
+					resource.TestCheckResourceAttr(rName, "ip_address_type", "ipv4"),
+				),
+			},
+			{
+				ResourceName:      rName,
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
+				Config: testAccLoadBalancerConfigIpAddressType(lName, "dualstack"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckLoadBalancerExists(rName),
+					resource.TestCheckResourceAttr(rName, "ip_address_type", "dualstack"),
+				),
+			},
+		},
+	})
+}
+
+func testAccLoadBalancer_Tags(t *testing.T) {
+	rName := "awslightsail_lb.test"
+	lName := acctest.RandomWithPrefix("tf-acc-test")
+
+	resource.Test(t, resource.TestCase{
+		Providers: testhelper.GetProviders(),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccLoadBalancerConfigTags1(lName, "key1", "value1"),
@@ -184,8 +239,8 @@ func testAccCheckLoadBalancerExists(n string) resource.TestCheckFunc {
 	}
 }
 
-func TestAccLoadBalancer_disappears(t *testing.T) {
-	rName := "awslightsail_instance.instance"
+func testAccLoadBalancer_disappears(t *testing.T) {
+	rName := "awslightsail_lb.test"
 	lName := acctest.RandomWithPrefix("tf-acc-test")
 
 	testDestroy := func(*terraform.State) error {
@@ -204,9 +259,9 @@ func TestAccLoadBalancer_disappears(t *testing.T) {
 
 		return nil
 	}
-	
-	resource.ParallelTest(t, resource.TestCase{
-		Providers:    testhelper.GetProviders(),
+
+	resource.Test(t, resource.TestCase{
+		Providers: testhelper.GetProviders(),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccLoadBalancerConfigBasic(lName),
@@ -223,7 +278,7 @@ func TestAccLoadBalancer_disappears(t *testing.T) {
 func testAccCheckLoadBalancerDestroy(s *terraform.State) error {
 
 	for _, rs := range s.RootModule().Resources {
-		if rs.Type != "awslightsail_load_balancer" {
+		if rs.Type != "awslightsail_lb" {
 			continue
 		}
 
@@ -255,7 +310,7 @@ func testAccCheckLoadBalancerDestroy(s *terraform.State) error {
 
 func testAccLoadBalancerConfigBasic(rName string) string {
 	return fmt.Sprintf(`
-resource "awslightsail_load_balancer" "test" {
+resource "awslightsail_lb" "test" {
   name              = %[1]q
   health_check_path = "/"
   instance_port     = "80"
@@ -265,7 +320,7 @@ resource "awslightsail_load_balancer" "test" {
 
 func testAccLoadBalancerConfigHealthCheckPath(rName string, rPath string) string {
 	return fmt.Sprintf(`
-resource "awslightsail_load_balancer" "test" {
+resource "awslightsail_lb" "test" {
   name              = %[1]q
   health_check_path = %[2]q
   instance_port     = "80"
@@ -273,9 +328,20 @@ resource "awslightsail_load_balancer" "test" {
 `, rName, rPath)
 }
 
+func testAccLoadBalancerConfigIpAddressType(rName string, rIpAddressType string) string {
+	return fmt.Sprintf(`
+resource "awslightsail_lb" "test" {
+  name              = %[1]q
+  health_check_path = "/"
+  instance_port     = "80"
+  ip_address_type   = %[2]q
+}
+`, rName, rIpAddressType)
+}
+
 func testAccLoadBalancerConfigTags1(rName string, tagKey1, tagValue1 string) string {
 	return fmt.Sprintf(`
-resource "awslightsail_load_balancer" "test" {
+resource "awslightsail_lb" "test" {
   name              = %[1]q
   health_check_path = "/"
   instance_port     = "80"
@@ -288,7 +354,7 @@ resource "awslightsail_load_balancer" "test" {
 
 func testAccLoadBalancerConfigTags2(rName, tagKey1, tagValue1, tagKey2, tagValue2 string) string {
 	return fmt.Sprintf(`
-resource "awslightsail_load_balancer" "test" {
+resource "awslightsail_lb" "test" {
   name              = %[1]q
   health_check_path = "/"
   instance_port     = "80"

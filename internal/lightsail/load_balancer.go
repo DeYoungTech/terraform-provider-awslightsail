@@ -10,6 +10,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lightsail"
+	"github.com/aws/aws-sdk-go-v2/service/lightsail/types"
 	"github.com/aws/smithy-go"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/conns"
 	"github.com/deyoungtech/terraform-provider-awslightsail/internal/tftags"
@@ -38,6 +39,11 @@ func ResourceLoadBalancer() *schema.Resource {
 					validation.StringMatch(regexp.MustCompile(`^[a-zA-Z]`), "must begin with an alphabetic character"),
 					validation.StringMatch(regexp.MustCompile(`^[a-zA-Z0-9_\-.]+[^._\-]$`), "must contain only alphanumeric characters, underscores, hyphens, and dots"),
 				),
+			},
+			"ip_address_type": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "ipv4",
 			},
 			"health_check_path": {
 				Type:     schema.TypeString,
@@ -71,11 +77,11 @@ func ResourceLoadBalancer() *schema.Resource {
 				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeInt},
 			},
-			"tags": TagsSchema(),
+			"tags":     TagsSchema(),
 			"tags_all": TagsSchemaComputed(),
 		},
-	CustomizeDiff: verify.SetTagsDiff,
-  	}
+		CustomizeDiff: verify.SetTagsDiff,
+	}
 }
 
 func resourceLoadBalancerCreate(d *schema.ResourceData, meta interface{}) error {
@@ -87,6 +93,7 @@ func resourceLoadBalancerCreate(d *schema.ResourceData, meta interface{}) error 
 		HealthCheckPath:  aws.String(d.Get("health_check_path").(string)),
 		InstancePort:     *aws.Int32(int32(d.Get("instance_port").(int))),
 		LoadBalancerName: aws.String(d.Get("name").(string)),
+		IpAddressType:    types.IpAddressType(d.Get("ip_address_type").(string)),
 	}
 
 	if len(tags) > 0 {
@@ -107,7 +114,7 @@ func resourceLoadBalancerCreate(d *schema.ResourceData, meta interface{}) error 
 
 	err = waitLightsailOperation(conn, op.Id)
 	if err != nil {
-		return fmt.Errorf("Error waiting for Relational Database (%s) to become ready: %s", d.Id(), err)
+		return fmt.Errorf("Error waiting for Load Balancer (%s) to become ready: %s", d.Id(), err)
 	}
 
 	return resourceLoadBalancerRead(d, meta)
@@ -139,8 +146,8 @@ func resourceLoadBalancerRead(d *schema.ResourceData, meta interface{}) error {
 
 	lb := resp.LoadBalancer
 
-
 	d.Set("arn", lb.Arn)
+	d.Set("ip_address_type", lb.IpAddressType)
 	d.Set("created_at", lb.CreatedAt.Format(time.RFC3339))
 	d.Set("health_check_path", lb.HealthCheckPath)
 	d.Set("instance_port", lb.InstancePort)
@@ -177,7 +184,7 @@ func resourceLoadBalancerDelete(d *schema.ResourceData, meta interface{}) error 
 
 	err = waitLightsailOperation(conn, op.Id)
 	if err != nil {
-		return fmt.Errorf("Error waiting for Relational Database (%s) to become ready: %s", d.Id(), err)
+		return fmt.Errorf("Error waiting for Load Balancer (%s) to become ready: %s", d.Id(), err)
 	}
 
 	return err
@@ -187,7 +194,7 @@ func resourceLoadBalancerUpdate(d *schema.ResourceData, meta interface{}) error 
 	conn := meta.(*conns.AWSClient).LightsailConn
 
 	if d.HasChange("health_check_path") {
-		_, err := conn.UpdateLoadBalancerAttribute(context.TODO(), &lightsail.UpdateLoadBalancerAttributeInput{
+		resp, err := conn.UpdateLoadBalancerAttribute(context.TODO(), &lightsail.UpdateLoadBalancerAttributeInput{
 			AttributeName:    "HealthCheckPath",
 			AttributeValue:   aws.String(d.Get("health_check_path").(string)),
 			LoadBalancerName: aws.String(d.Get("name").(string)),
@@ -195,6 +202,30 @@ func resourceLoadBalancerUpdate(d *schema.ResourceData, meta interface{}) error 
 		d.Set("health_check_path", d.Get("health_check_path").(string))
 		if err != nil {
 			return err
+		}
+		op := resp.Operations[0]
+
+		err = waitLightsailOperation(conn, op.Id)
+		if err != nil {
+			return fmt.Errorf("Error waiting for Load Balancer (%s) to become ready: %s", d.Id(), err)
+		}
+	}
+
+	if d.HasChange("ip_address_type") {
+		resp, err := conn.SetIpAddressType(context.TODO(), &lightsail.SetIpAddressTypeInput{
+			ResourceType:  "LoadBalancer",
+			IpAddressType: types.IpAddressType(d.Get("ip_address_type").(string)),
+			ResourceName:  aws.String(d.Get("name").(string)),
+		})
+		d.Set("ip_address_type", d.Get("ip_address_type").(string))
+		if err != nil {
+			return err
+		}
+		op := resp.Operations[0]
+
+		err = waitLightsailOperation(conn, op.Id)
+		if err != nil {
+			return fmt.Errorf("Error waiting for Load Balancer (%s) to become ready: %s", d.Id(), err)
 		}
 	}
 
