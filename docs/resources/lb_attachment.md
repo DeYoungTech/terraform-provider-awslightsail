@@ -12,7 +12,7 @@ Attaches a Lightsail Instance to a load balancer resource.
 
 ## Example Usage
 
-```hcl
+```terraform
 data "awslightsail_availability_zones" "all" {}
 
 resource "awslightsail_instance" "test" {

@@ -110,7 +110,6 @@ func resourceLoadBalancerAttachmentRead(d *schema.ResourceData, meta interface{}
 	}
 
 	if !entryExists {
-		fmt.Errorf("error reading Load Balancer Attachment (%s): %w", d.Id(), err)
 		d.SetId("")
 		return nil
 	}

@@ -12,7 +12,7 @@ Creates a Lightsail load balancer resource.
 
 ## Example Usage
 
-```hcl
+```terraform
 resource "awslightsail_lb" "test" {
   name              = "test-load-balancer"
   health_check_path = "/"
@@ -45,6 +45,6 @@ The following attributes are exported in addition to the arguments listed above:
 
 Lightsail Load Balancers can be imported using their name, e.g.
 
-```
+```shell
 $ terraform import awslightsail_lb.test 'test'
 ```
