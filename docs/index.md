@@ -21,7 +21,6 @@ terraform {
   required_providers {
     aws = {
       source  = "deyoungtech/awslightsail"
-      version = "~> 1.0"
     }
   }
 }
@@ -48,7 +47,6 @@ Terraform 0.12 and earlier:
 ```terraform
 # Configure the AWS Provider
 provider "awslightsail" {
-  version = "~> 1.0"
   region  = "us-east-1"
 }
 
