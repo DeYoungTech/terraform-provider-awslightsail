@@ -218,7 +218,7 @@ resource "awslightsail_instance" "test" {
 }
 
 resource "awslightsail_lb_attachment" "test" {
-  lb_name       = awslightsail_lb.test.name
+  load_balancer_name       = awslightsail_lb.test.name
   instance_name = awslightsail_instance.test.name
 }
 `, lbName, liName)
