@@ -34,7 +34,7 @@ The following arguments are supported:
 
 ## Attributes Reference
 
-The following attributes are exported in addition to the arguments listed above:
+In addition to all arguments above, the following attributes are exported:
 
 * `arn` - The ARN of the Lightsail load balancer.
 * `created_at` - The timestamp when the load balancer was created.
