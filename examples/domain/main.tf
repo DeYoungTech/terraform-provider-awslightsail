@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     awslightsail = {
-      source  = "registry.terraform.io/deyoungtech/awslightsail"
+      source  = "deyoungtech/awslightsail"
     }
   }
 }
