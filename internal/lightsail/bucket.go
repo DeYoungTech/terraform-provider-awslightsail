@@ -171,6 +171,10 @@ func resourceBucketUpdate(d *schema.ResourceData, meta interface{}) error {
 		resp, err := conn.UpdateBucket(context.TODO(), &req)
 		op := resp.Operations[0]
 
+		if err != nil {
+			return err
+		}
+		
 		err = waitLightsailOperation(conn, op.Id)
 		if err != nil {
 			return fmt.Errorf("Error waiting for Bucket (%s) to become ready: %s", d.Id(), err)
@@ -184,6 +188,10 @@ func resourceBucketUpdate(d *schema.ResourceData, meta interface{}) error {
 		}
 		resp, err := conn.UpdateBucketBundle(context.TODO(), &req)
 		op := resp.Operations[0]
+
+		if err != nil {
+			return err
+		}
 
 		err = waitLightsailOperation(conn, op.Id)
 		if err != nil {
