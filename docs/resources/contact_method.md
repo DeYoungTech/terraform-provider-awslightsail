@@ -6,7 +6,7 @@ description: |-
 
 # Resource: awslightsail_contact_method
 
-Creates a domain entry resource. Each AWS account is limited to a single endpoint per conact protocol.
+Creates a contact method resource. Each AWS account is limited to a single endpoint per conact protocol.
 
 ## Example Usage
 
