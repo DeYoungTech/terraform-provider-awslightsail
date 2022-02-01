@@ -20,7 +20,7 @@ Terraform 0.13 and later:
 terraform {
   required_providers {
     aws = {
-      source  = "deyoungtech/awslightsail"
+      source = "deyoungtech/awslightsail"
     }
   }
 }
@@ -47,7 +47,7 @@ Terraform 0.12 and earlier:
 ```terraform
 # Configure the AWS Provider
 provider "awslightsail" {
-  region  = "us-east-1"
+  region = "us-east-1"
 }
 
 # Create an instance

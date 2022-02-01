@@ -70,6 +70,7 @@ func Provider() *schema.Provider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
+			"awslightsail_bucket":               ResourceBucket(),
 			"awslightsail_contact_method":       ResourceContactMethod(),
 			"awslightsail_database":             ResourceDatabase(),
 			"awslightsail_domain":               ResourceDomain(),
