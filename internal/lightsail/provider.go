@@ -73,6 +73,8 @@ func Provider() *schema.Provider {
 			"awslightsail_bucket":               ResourceBucket(),
 			"awslightsail_contact_method":       ResourceContactMethod(),
 			"awslightsail_database":             ResourceDatabase(),
+			"awslightsail_disk":                 ResourceDisk(),
+			"awslightsail_disk_attachment":      ResourceDiskAttachment(),
 			"awslightsail_domain":               ResourceDomain(),
 			"awslightsail_domain_entry":         ResourceDomainEntry(),
 			"awslightsail_instance":             ResourceInstance(),
