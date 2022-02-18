@@ -229,8 +229,8 @@ data "awslightsail_availability_zones" "all" {}
 
 resource "awslightsail_disk" "test" {
   name              = %[1]q
-  size_in_gb = 8
-  availability_zone     = data.awslightsail_availability_zones.all.names[0]
+  size_in_gb        = 8
+  availability_zone = data.awslightsail_availability_zones.all.names[0]
 }
 `, rName)
 }
@@ -240,9 +240,9 @@ func testAccDiskConfigTags1(rName string, tagKey1, tagValue1 string) string {
 data "awslightsail_availability_zones" "all" {}
 
 resource "awslightsail_disk" "test" {
-	name              = %[1]q
-	size_in_gb = 8
-	availability_zone     = data.awslightsail_availability_zones.all.names[0]
+  name              = %[1]q
+  size_in_gb        = 8
+  availability_zone = data.awslightsail_availability_zones.all.names[0]
   tags = {
     %[2]q = %[3]q
   }
@@ -255,9 +255,9 @@ func testAccDiskConfigTags2(rName, tagKey1, tagValue1, tagKey2, tagValue2 string
 data "awslightsail_availability_zones" "all" {}
 
 resource "awslightsail_disk" "test" {
-	name              = %[1]q
-	size_in_gb = 8
-	availability_zone     = data.awslightsail_availability_zones.all.names[0]
+  name              = %[1]q
+  size_in_gb        = 8
+  availability_zone = data.awslightsail_availability_zones.all.names[0]
   tags = {
     %[2]q = %[3]q
     %[4]q = %[5]q

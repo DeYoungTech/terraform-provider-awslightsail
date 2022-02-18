@@ -15,8 +15,8 @@ Creates a Lightsail Disk resource.
 ```terraform
 resource "awslightsail_disk" "test" {
   name              = "test"
-  size_in_gb = 8
-  availability_zone     = "us-east-1"
+  size_in_gb        = 8
+  availability_zone = "us-east-1"
 }
 ```
 

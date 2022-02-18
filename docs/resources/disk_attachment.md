@@ -16,10 +16,10 @@ Attaches a Lightsail disk to a Lightsail Instance
 data "awslightsail_availability_zones" "all" {}
 
 resource "awslightsail_disk" "test" {
-	name              = "test"
-	size_in_gb = 8
-	availability_zone     = data.awslightsail_availability_zones.all.names[0]
-  }
+  name              = "test"
+  size_in_gb        = 8
+  availability_zone = data.awslightsail_availability_zones.all.names[0]
+}
 
 resource "awslightsail_instance" "test" {
   name              = "test"
@@ -29,9 +29,9 @@ resource "awslightsail_instance" "test" {
 }
 
 resource "awslightsail_disk_attachment" "test" {
-  disk_name = awslightsail_disk.test.name
-  instance_name      = awslightsail_instance.test.name
-  disk_path = "/dev/xvdf"
+  disk_name     = awslightsail_disk.test.name
+  instance_name = awslightsail_instance.test.name
+  disk_path     = "/dev/xvdf"
 }
 ```
 
