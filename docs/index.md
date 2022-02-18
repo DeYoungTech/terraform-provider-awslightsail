@@ -97,7 +97,7 @@ are also used, if applicable:
 
 ## Argument Reference
 
-In addition to [generic `provider` arguments](https://www.terraform.io/docs/configuration/providers.html)
+In addition to generic `provider` arguments:
 (e.g., `alias` and `version`), the following arguments are supported in the AWS
  `provider` block:
 
