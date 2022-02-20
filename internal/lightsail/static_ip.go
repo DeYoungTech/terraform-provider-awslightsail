@@ -18,6 +18,9 @@ func ResourceStaticIP() *schema.Resource {
 		Create: resourceStaticIPCreate,
 		Read:   resourceStaticIPRead,
 		Delete: resourceStaticIPDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -72,10 +75,9 @@ func resourceStaticIPCreate(d *schema.ResourceData, meta interface{}) error {
 func resourceStaticIPRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*conns.AWSClient).LightsailConn
 
-	name := d.Get("name").(string)
-	log.Printf("[INFO] Reading Lightsail Static IP: %q", name)
+	log.Printf("[INFO] Reading Lightsail Static IP: %q", d.Id())
 	resp, err := conn.GetStaticIp(context.TODO(), &lightsail.GetStaticIpInput{
-		StaticIpName: aws.String(name),
+		StaticIpName: aws.String(d.Id()),
 	})
 
 	if err != nil {
@@ -90,6 +92,7 @@ func resourceStaticIPRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("arn", resp.StaticIp.Arn)
 	d.Set("ip_address", resp.StaticIp.IpAddress)
 	d.Set("support_code", resp.StaticIp.SupportCode)
+    d.Set("name", resp.StaticIp.Name)
 
 	return nil
 }
