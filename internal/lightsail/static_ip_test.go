@@ -31,6 +31,11 @@ func TestAccStaticIP_basic(t *testing.T) {
 					testAccCheckStaticIPExists(rName),
 				),
 			},
+			{
+				ResourceName:      rName,
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 }

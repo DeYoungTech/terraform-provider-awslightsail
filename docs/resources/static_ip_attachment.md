@@ -43,3 +43,11 @@ The following arguments are supported:
 In addition to all arguments above, the following attributes are exported:
 
 * `ip_address` - The allocated static IP address
+
+## Import
+
+Lightsail Static IP address attachment can be imported using the name of the IP, e.g.,
+
+``` shell
+terraform import awslightsail_static_ip_attachment.gitlab_test 'gitlab-ip'
+```

@@ -31,3 +31,11 @@ In addition to all arguments above, the following attributes are exported:
 * `arn` - The ARN of the Lightsail static IP
 * `ip_address` - The allocated static IP address
 * `support_code` - The support code.
+
+## Import
+
+Lightsail Static IP addresses can be imported using their name, e.g.,
+
+``` shell
+terraform import awslightsail_static_ip.gitlab_test 'gitlab-ip'
+```

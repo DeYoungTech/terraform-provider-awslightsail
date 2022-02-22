@@ -18,6 +18,9 @@ func ResourceStaticIPAttachment() *schema.Resource {
 		Create: resourceStaticIPAttachmentCreate,
 		Read:   resourceStaticIPAttachmentRead,
 		Delete: resourceStaticIPAttachmentDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"static_ip_name": {
@@ -89,6 +92,7 @@ func resourceStaticIPAttachmentRead(d *schema.ResourceData, meta interface{}) er
 
 	d.Set("instance_name", resp.StaticIp.AttachedTo)
 	d.Set("ip_address", resp.StaticIp.IpAddress)
+	d.Set("static_ip_name", d.Id())
 
 	return nil
 }
