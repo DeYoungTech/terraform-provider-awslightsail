@@ -92,7 +92,7 @@ func resourceStaticIPRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("arn", resp.StaticIp.Arn)
 	d.Set("ip_address", resp.StaticIp.IpAddress)
 	d.Set("support_code", resp.StaticIp.SupportCode)
-    d.Set("name", resp.StaticIp.Name)
+	d.Set("name", resp.StaticIp.Name)
 
 	return nil
 }

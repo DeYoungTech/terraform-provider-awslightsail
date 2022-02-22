@@ -18,9 +18,9 @@ func ResourceStaticIPAttachment() *schema.Resource {
 		Create: resourceStaticIPAttachmentCreate,
 		Read:   resourceStaticIPAttachmentRead,
 		Delete: resourceStaticIPAttachmentDelete,
-        Importer: &schema.ResourceImporter{
-                State: schema.ImportStatePassthrough,
-        },
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"static_ip_name": {
