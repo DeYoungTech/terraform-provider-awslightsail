@@ -34,6 +34,11 @@ func TestAccStaticIPAttachment_basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(rName, "ip_address"),
 				),
 			},
+			{
+				ResourceName:      rName,
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
 		},
 	})
 }
