@@ -63,6 +63,7 @@ In addition to all arguments above, the following attributes are exported:
 ## Import
 
 `awslightsail_container_service` can be imported using their name, e.g.
+
 ```shell
 $ terraform import awslightsail_container_service.my_container_service container-service-1`
 ```
