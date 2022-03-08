@@ -19,7 +19,7 @@ Terraform 0.13 and later:
 ```terraform
 terraform {
   required_providers {
-    aws = {
+    awslightsail = {
       source = "deyoungtech/awslightsail"
     }
   }

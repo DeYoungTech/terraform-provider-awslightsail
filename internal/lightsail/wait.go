@@ -39,6 +39,25 @@ const (
 	DatabaseDelay = 5 * time.Second
 	// DatabaseMinTimeout is the MinTimout Value for Relational Database Modifications
 	DatabaseMinTimeout = 3 * time.Second
+
+	// The current state of the container service. The following container service
+	// * PENDING - The container service is being created.
+	ContainerServiceStatePending = "PENDING"
+	// READY - The container service is running but it does not have an active container deployment
+	ContainerServiceStateReady = "READY"
+	// * DEPLOYING - The container service is launching a container deployment
+	ContainerServiceStateDeploying = "DEPLOYING"
+	//
+	// * RUNNING - The container service is running and it has
+	// an active container deployment.
+	ContainerServiceStateRunning = "RUNNING"
+	// * UPDATING - The container service is being updated
+	ContainerServiceStateUpdating = "UPDATING"
+	// * DELETING - The container service is being deleted.
+	ContainerServiceStateDeleting = "DELEATING"
+	// * DISABLED - The container service is disabled, and its active
+	// deployment and containers, if any, are shut down.
+	ContainerServiceStateDisabled = "DISABLED"
 )
 
 // waitLightsailOperation waits for an Operation to return Succeeded or Compleated
@@ -96,6 +115,26 @@ func waitDatabaseBackupRetentionModified(conn *lightsail.Client, db *string, sta
 	outputRaw, err := stateConf.WaitForState()
 
 	if _, ok := outputRaw.(*lightsail.GetRelationalDatabaseOutput); ok {
+		return err
+	}
+
+	return err
+}
+
+func waitContainerService(conn *lightsail.Client, cs *string) error {
+	// first wait for the completion of creating an empty container service
+	stateConf := &resource.StateChangeConf{
+		Pending:    []string{ContainerServiceStatePending, ContainerServiceStateUpdating, ContainerServiceStateDeploying, ContainerServiceStateDeleting},
+		Target:     []string{ContainerServiceStateReady, ContainerServiceStateRunning, ContainerServiceStateDisabled},
+		Refresh:    statusLightsailContainerService(conn, cs),
+		Timeout:    25 * time.Minute,
+		Delay:      5 * time.Second,
+		MinTimeout: 3 * time.Second,
+	}
+
+	outputRaw, err := stateConf.WaitForState()
+
+	if _, ok := outputRaw.(*lightsail.GetContainerServicesOutput); ok {
 		return err
 	}
 

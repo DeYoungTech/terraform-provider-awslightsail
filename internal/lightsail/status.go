@@ -85,3 +85,18 @@ func statusLightsailDatabaseBackupRetention(conn *lightsail.Client, db *string) 
 		return output, strconv.FormatBool(*output.RelationalDatabase.BackupRetentionEnabled), nil
 	}
 }
+
+// call GetContainerServices to check the current state of the container service
+func statusLightsailContainerService(conn *lightsail.Client, cs *string) resource.StateRefreshFunc {
+	return func() (interface{}, string, error) {
+		input := &lightsail.GetContainerServicesInput{
+			ServiceName: cs,
+		}
+		log.Printf("[DEBUG] Checking Lightsail Container Service state changes")
+		resp, err := conn.GetContainerServices(context.TODO(), input)
+		if err != nil {
+			return nil, "", err
+		}
+		return resp.ContainerServices[0], string(resp.ContainerServices[0].State), nil
+	}
+}
