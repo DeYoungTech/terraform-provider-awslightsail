@@ -18,9 +18,9 @@ see ["Regions and Availability Zones in Amazon Lightsail"](https://lightsail.aws
 ```terraform
 # create a new Lightsail container service
 resource "awslightsail_container_service" "my_container_service" {
-  name = "container-service-1"
-  power = "nano"
-  scale = 1
+  name        = "container-service-1"
+  power       = "nano"
+  scale       = 1
   is_disabled = false
   tags = {
     foo1 = "bar1"
