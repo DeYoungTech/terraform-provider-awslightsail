@@ -42,5 +42,5 @@ In addition to all arguments above, the following attributes are exported:
 `awslightsail_certificate` can be imported using the certificate name, e.g.
 
 ```shell
-$ terraform import awslightsail_ccertificate.test CertificateName
+$ terraform import awslightsail_certificate.test CertificateName
 ```

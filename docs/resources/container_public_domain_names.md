@@ -6,7 +6,7 @@ description: |-
 
 # Resource: awslightsail_container_public_domain_names
 
-Public domain names to be configured as the public endpoint of your container service. Example: www.testdomain.com 
+Public domain names to be configured as the public endpoint of your container service. Example: www.testdomain.com
 
 An Amazon Lightsail container service is a highly scalable compute and networking resource on which you can deploy, run,
 and manage containers. For more information, see
@@ -61,7 +61,7 @@ The following arguments are supported:
 * `public_domain_names` - (Required) The public domain names to use with the container service, such as example.com
   and www.example.com. You can specify up to four public domain names for a container service. The domain names that you
   specify are used when you create a deployment with a container configured as the public endpoint of your container
-  service. 
+  service.
     * `certificate` - (Required) Describes the details of an SSL/TLS certificate for a container service.
         * `certificate_name` - (Required) The certificate's name.
         * `domain_names` - (Required) The domain names. A list of string.
