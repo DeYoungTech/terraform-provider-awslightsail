@@ -5,6 +5,7 @@ PKG_NAME=internal
 TEST_COUNT?=1
 ACCTEST_TIMEOUT?=180m
 ACCTEST_PARALLELISM?=20
+AWS_REGION=us-east-1
 
 default: build
 
