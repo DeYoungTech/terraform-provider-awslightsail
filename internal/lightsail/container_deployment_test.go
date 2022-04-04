@@ -53,6 +53,7 @@ func testAccContainerDeployment_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "1"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test1"),
@@ -67,6 +68,7 @@ func testAccContainerDeployment_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "2"),
 					resource.TestCheckResourceAttr(rName, "container.#", "2"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test1"),
@@ -86,6 +88,7 @@ func testAccContainerDeployment_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "3"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test3"),
@@ -112,6 +115,7 @@ func testAccContainerDeployment_ContainerEnvironment(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "1"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -131,6 +135,7 @@ func testAccContainerDeployment_ContainerEnvironment(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "2"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -150,6 +155,7 @@ func testAccContainerDeployment_ContainerEnvironment(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "3"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -174,6 +180,7 @@ func testAccContainerDeployment_ContainerEnvironment(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "4"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -200,6 +207,7 @@ func testAccContainerDeployment_ContainerPort(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "1"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -219,6 +227,7 @@ func testAccContainerDeployment_ContainerPort(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "2"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -238,6 +247,7 @@ func testAccContainerDeployment_ContainerPort(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "3"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -262,6 +272,7 @@ func testAccContainerDeployment_ContainerPort(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "4"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test"),
@@ -288,6 +299,7 @@ func testAccContainerServiceDeployment_PublicEndpoint(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "1"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test1"),
@@ -311,6 +323,7 @@ func testAccContainerServiceDeployment_PublicEndpoint(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "2"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test2"),
@@ -334,6 +347,7 @@ func testAccContainerServiceDeployment_PublicEndpoint(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "3"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test2"),
@@ -357,6 +371,7 @@ func testAccContainerServiceDeployment_PublicEndpoint(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "4"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test2"),
@@ -380,6 +395,7 @@ func testAccContainerServiceDeployment_PublicEndpoint(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckContainerDeploymentExists(rName),
 					resource.TestCheckResourceAttr(rName, "state", "ACTIVE"),
+					resource.TestCheckResourceAttr(rName, "container_service_name", lName),
 					resource.TestCheckResourceAttr(rName, "version", "5"),
 					resource.TestCheckResourceAttr(rName, "container.#", "1"),
 					resource.TestCheckResourceAttr(rName, "container.0.container_name", "test2"),
