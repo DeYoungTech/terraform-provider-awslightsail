@@ -6,6 +6,8 @@ description: |-
 
 # Resource: awslightsail_container_deployment
 
+Deploys configured containers to an existing Container Service.
+
 An Amazon Lightsail container service is a highly scalable compute and networking resource on which you can deploy, run,
 and manage containers. For more information, see
 [Container services in Amazon Lightsail](https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-container-services).

@@ -36,3 +36,11 @@ In addition to all arguments above, the following attributes are exported:
 * `created_at` - The timestamp when the instance was created.
 * `domain_validation_options` - Set of domain validation objects which can be used to complete certificate validation. Can have more than one element, e.g., if SANs are defined.
 * `tags_all` - A map of tags assigned to the resource, including those inherited from the provider `default_tags` configuration block.
+
+## Import
+
+`awslightsail_certificate` can be imported using the certificate name, e.g.
+
+```shell
+$ terraform import awslightsail_certificate.test CertificateName
+```

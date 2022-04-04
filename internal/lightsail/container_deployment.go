@@ -217,6 +217,7 @@ func resourceContainerDeploymentRead(d *schema.ResourceData, meta interface{}) e
 
 	csd := resp.Deployments[0]
 
+	d.Set("container_service_name", d.Id())
 	d.Set("container", flattenLightsailContainerServiceDeploymentContainers(csd.Containers))
 	d.Set("public_endpoint", flattenLightsailContainerServiceDeploymentPublicEndpoint(csd.PublicEndpoint))
 	d.Set("state", csd.State)
