@@ -1,4 +1,6 @@
 # Terraform Provider for AWS Lightsail
+> **I am now a contributor to the official AWS provider. All features within this provider have been added to the official AWS provider and all of my development effort will be to contribute Lightsail resources to the Official provider. This provider will no longer be updated.**
+
 A terraform provider for AWS Lightsail using `aws-sdk-go-v2`.
 
 ```terraform
